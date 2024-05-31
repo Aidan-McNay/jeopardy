@@ -1,5 +1,5 @@
 //========================================================================
-// boardy.go
+// board.go
 //========================================================================
 // A representation of a Jeopardy board
 //
@@ -36,6 +36,18 @@ func (b *Board) AddCategories(categories ...*Category) {
 		return
 	}
 	b.categories = append(b.categories, categories...)
+}
+
+//------------------------------------------------------------------------
+// AddPlayers
+//------------------------------------------------------------------------
+// Appends a new player(s)
+
+func (b *Board) AddPlayers(players ...*Player) {
+	if b == nil {
+		return
+	}
+	b.players = append(b.players, players...)
 }
 
 //------------------------------------------------------------------------

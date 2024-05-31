@@ -32,8 +32,6 @@ func MakeCategory(name string) *Category {
 //------------------------------------------------------------------------
 // Insert new question(s), such that the slice of questions remains sorted
 // by points
-//
-// Inspired by https://stackoverflow.com/a/55460931/23068975
 
 func cmp(a, b *Question) int {
 	return a.points - b.points
