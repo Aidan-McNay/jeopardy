@@ -4,7 +4,11 @@ go 1.22.1
 
 replace logic => ./logic
 
-require fyne.io/fyne/v2 v2.4.5
+require (
+	fyne.io/fyne/v2 v2.4.5
+	logic v0.0.0-00010101000000-000000000000
+	storage v0.0.0-00010101000000-000000000000
+)
 
 require (
 	fyne.io/systray v1.10.1-0.20231115130155-104f5ef7839e // indirect
@@ -35,3 +39,5 @@ require (
 	gopkg.in/yaml.v3 v3.0.1 // indirect
 	honnef.co/go/js/dom v0.0.0-20210725211120-f030747120f2 // indirect
 )
+
+replace storage => ./storage

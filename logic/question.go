@@ -13,9 +13,9 @@ package logic
 //------------------------------------------------------------------------
 
 type Question struct {
-	prompt, answer string
-	points         int
-	answered       bool
+	Prompt, Answer string
+	Points         int
+	Answered       bool
 }
 
 //------------------------------------------------------------------------
@@ -34,25 +34,25 @@ func (q *Question) GetPrompt() string {
 	if q == nil {
 		return ""
 	}
-	return q.prompt
+	return q.Prompt
 }
 
 func (q *Question) GetAnswer() string {
 	if q == nil {
 		return ""
 	}
-	return q.answer
+	return q.Answer
 }
 
 func (q *Question) GetPoints() int {
 	if q == nil {
 		return 0
 	}
-	return q.points
+	return q.Points
 }
 
 func (q *Question) SetAnswered() {
 	if q != nil {
-		q.answered = true
+		q.Answered = true
 	}
 }

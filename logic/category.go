@@ -15,8 +15,8 @@ import "slices"
 //------------------------------------------------------------------------
 
 type Category struct {
-	name      string
-	questions [](*Question)
+	Name      string
+	Questions [](*Question)
 }
 
 //------------------------------------------------------------------------
@@ -34,15 +34,15 @@ func MakeCategory(name string) *Category {
 // by points
 
 func cmp(a, b *Question) int {
-	return a.points - b.points
+	return a.Points - b.Points
 }
 
-func (c *Category) AddQuestion(questions ...*Question) {
+func (c *Category) AddQuestions(questions ...*Question) {
 	if c == nil {
 		return
 	}
-	c.questions = append(c.questions, questions...)
-	slices.SortFunc(c.questions, cmp)
+	c.Questions = append(c.Questions, questions...)
+	slices.SortFunc(c.Questions, cmp)
 }
 
 //------------------------------------------------------------------------
@@ -56,12 +56,12 @@ func (c *Category) MaxPoints() int {
 	if c == nil {
 		return 0
 	}
-	if len(c.questions) == 0 {
+	if len(c.Questions) == 0 {
 		return 0
 	} else {
-		curr_value := c.questions[0].points
-		for _, v := range c.questions {
-			if points := v.points; points > curr_value {
+		curr_value := c.Questions[0].Points
+		for _, v := range c.Questions {
+			if points := v.Points; points > curr_value {
 				curr_value = points
 			}
 		}

@@ -3,6 +3,9 @@ package main
 import (
 	"log"
 
+	"logic"
+	"storage"
+
 	"fyne.io/fyne/v2/app"
 	"fyne.io/fyne/v2/container"
 	"fyne.io/fyne/v2/theme"
@@ -38,6 +41,25 @@ func toolbar() *widget.Toolbar {
 }
 
 func main() {
+	board := logic.MakeBoard("Test Board")
+
+	question1 := logic.MakeQuestion("prompt1", "answer1", 200)
+	question2 := logic.MakeQuestion("prompt2", "answer2", 100)
+	question3 := logic.MakeQuestion("prompt3", "answer3", 300)
+	question4 := logic.MakeQuestion("prompt4", "answer4", 400)
+
+	category1 := logic.MakeCategory("Category1")
+	category2 := logic.MakeCategory("Category2")
+
+	category1.AddQuestions(question1, question2)
+	category2.AddQuestions(question3, question4)
+
+	board.AddCategories(category1, category2)
+
+	storage.Save("board.txt", board)
+
+	//------------------
+
 	myApp := app.New()
 	myWindow := myApp.NewWindow("Jeopardy Editor")
 

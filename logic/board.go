@@ -13,9 +13,9 @@ package logic
 //------------------------------------------------------------------------
 
 type Board struct {
-	name       string
-	categories [](*Category)
-	players    [](*Player)
+	Name       string
+	Categories [](*Category)
+	Players    [](*Player)
 }
 
 //------------------------------------------------------------------------
@@ -35,7 +35,7 @@ func (b *Board) AddCategories(categories ...*Category) {
 	if b == nil {
 		return
 	}
-	b.categories = append(b.categories, categories...)
+	b.Categories = append(b.Categories, categories...)
 }
 
 //------------------------------------------------------------------------
@@ -47,7 +47,7 @@ func (b *Board) AddPlayers(players ...*Player) {
 	if b == nil {
 		return
 	}
-	b.players = append(b.players, players...)
+	b.Players = append(b.Players, players...)
 }
 
 //------------------------------------------------------------------------
@@ -62,11 +62,11 @@ func (b *Board) MaxPoints() int {
 	if b == nil {
 		return 0
 	}
-	if len(b.categories) == 0 {
+	if len(b.Categories) == 0 {
 		return 0
 	} else {
-		curr_value := b.categories[0].MaxPoints()
-		for _, v := range b.categories {
+		curr_value := b.Categories[0].MaxPoints()
+		for _, v := range b.Categories {
 			if points := v.MaxPoints(); points > curr_value {
 				curr_value = points
 			}
