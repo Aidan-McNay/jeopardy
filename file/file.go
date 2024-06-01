@@ -8,13 +8,12 @@
 // Author: Aidan McNay
 // Date: May 31st, 2024
 
-package storage
+package file
 
 import (
 	"bytes"
 	"encoding/json"
 	"io"
-	"os"
 	"sync"
 )
 
@@ -41,34 +40,24 @@ func unmarshal(r io.Reader, v interface{}) error {
 
 var file_lock sync.Mutex
 
-func Save(path string, v interface{}) error {
+func Save(fileWriter io.WriteCloser, v interface{}) error {
 	file_lock.Lock()
 	defer file_lock.Unlock()
-
-	f, err := os.Create(path)
-	if err != nil {
-		return err
-	}
-	defer f.Close()
+	defer fileWriter.Close()
 
 	r, err := marshal(v)
 	if err != nil {
 		return err
 	}
 
-	_, err = io.Copy(f, r)
+	_, err = io.Copy(fileWriter, r)
 	return err
 }
 
-func Load(path string, v interface{}) error {
+func Load(fileReader io.ReadCloser, v interface{}) error {
 	file_lock.Lock()
 	defer file_lock.Unlock()
+	defer fileReader.Close()
 
-	f, err := os.Open(path)
-	if err != nil {
-		return err
-	}
-	defer f.Close()
-
-	return unmarshal(f, v)
+	return unmarshal(fileReader, v)
 }
