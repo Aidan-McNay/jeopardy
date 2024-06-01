@@ -11,7 +11,6 @@ package gui
 import (
 	"errors"
 	"fmt"
-	"image/color"
 	"jeopardy/logic"
 
 	"fyne.io/fyne/v2"
@@ -20,6 +19,7 @@ import (
 	"fyne.io/fyne/v2/data/validation"
 	"fyne.io/fyne/v2/dialog"
 	"fyne.io/fyne/v2/layout"
+	"fyne.io/fyne/v2/theme"
 	"fyne.io/fyne/v2/widget"
 )
 
@@ -85,8 +85,6 @@ func addCategoryButton(win fyne.Window) *fyne.Container {
 // Make a new widget to represent a board
 //------------------------------------------------------------------------
 
-var titleColor color.Color = color.RGBA{41, 111, 246, 255}
-
 func boardWidget(win fyne.Window) fyne.Widget {
 	curr_board := logic.GetCurrBoard()
 
@@ -105,11 +103,17 @@ func boardWidget(win fyne.Window) fyne.Widget {
 		label.Alignment = fyne.TextAlignCenter
 		boardLayout = label
 	} else {
-		nameText := canvas.NewText(curr_board.Name, titleColor)
+		nameText := canvas.NewText(curr_board.Name, theme.PrimaryColor())
 		nameText.Alignment = fyne.TextAlignCenter
 		nameText.TextStyle = fyne.TextStyle{Bold: true}
 		nameText.TextSize = 20
-		boardLayout = container.NewVBox(nameText, gridLayout)
+
+		nameBorder := canvas.NewRectangle(theme.BackgroundColor())
+		nameBorder.StrokeWidth = 2
+		nameBorder.StrokeColor = theme.PrimaryColor()
+
+		name := container.NewStack(nameBorder, nameText)
+		boardLayout = container.NewVBox(name, gridLayout)
 	}
 	scrollWidget := container.NewScroll(boardLayout)
 	return scrollWidget

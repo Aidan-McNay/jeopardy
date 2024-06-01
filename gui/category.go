@@ -9,6 +9,7 @@
 package gui
 
 import (
+	"errors"
 	"fmt"
 	"jeopardy/logic"
 	"strconv"
@@ -28,7 +29,11 @@ import (
 
 func isInt(s string) error {
 	_, err := strconv.Atoi(s)
-	return err
+	if err != nil {
+
+		return errors.New(s + " is not a valid number")
+	}
+	return nil
 }
 
 //------------------------------------------------------------------------
