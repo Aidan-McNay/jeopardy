@@ -12,15 +12,36 @@ import (
 	"errors"
 	"fmt"
 	"jeopardy/logic"
+	"log"
 	"strconv"
 
 	"fyne.io/fyne/v2"
+	"fyne.io/fyne/v2/canvas"
 	"fyne.io/fyne/v2/container"
 	"fyne.io/fyne/v2/data/validation"
 	"fyne.io/fyne/v2/dialog"
 	"fyne.io/fyne/v2/layout"
+	"fyne.io/fyne/v2/theme"
 	"fyne.io/fyne/v2/widget"
 )
+
+//------------------------------------------------------------------------
+// categoryButton
+//------------------------------------------------------------------------
+// Creates the button to edit a category, as well as buttons on the side
+// to shift the category location
+
+func categoryButton(category *logic.Category) fyne.CanvasObject {
+	name := widget.NewButton(category.Name, func() {
+		log.Printf("%v category pressed", category.Name)
+	})
+	name.Importance = widget.LowImportance
+
+	categoryBorder := canvas.NewRectangle(theme.BackgroundColor())
+	categoryBorder.StrokeWidth = 2
+	categoryBorder.StrokeColor = theme.PrimaryColor()
+	return container.NewStack(categoryBorder, name)
+}
 
 //------------------------------------------------------------------------
 // isInt
@@ -93,7 +114,7 @@ func addQuestionButton(win fyne.Window, category *logic.Category) fyne.CanvasObj
 func categoryGUI(win fyne.Window, category *logic.Category) fyne.CanvasObject {
 	var rows []fyne.CanvasObject = nil
 
-	rows = append(rows, widget.NewLabel(category.Name))
+	rows = append(rows, categoryButton(category))
 	for _, v := range category.Questions {
 		displayText := fmt.Sprintf("%v", v.Points)
 		rows = append(rows, widget.NewLabel(displayText))

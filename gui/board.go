@@ -11,6 +11,7 @@ package gui
 import (
 	"errors"
 	"fmt"
+	"jeopardy/assets"
 	"jeopardy/logic"
 
 	"fyne.io/fyne/v2"
@@ -22,6 +23,21 @@ import (
 	"fyne.io/fyne/v2/theme"
 	"fyne.io/fyne/v2/widget"
 )
+
+//------------------------------------------------------------------------
+// addSwapper
+//------------------------------------------------------------------------
+// Adds a Swapper, to swap the two adjacent categories
+
+func addSwapper(idx1, idx2 int) fyne.CanvasObject {
+	swapIcon := theme.NewThemedResource(assets.ResourceSwapPng)
+	swapButton := widget.NewButtonWithIcon("", swapIcon, func() {
+		curr_board := logic.GetCurrBoard()
+		curr_board.SwapCategories(idx1, idx2)
+		logic.BoardChange()
+	})
+	return container.NewVBox(swapButton, layout.NewSpacer())
+}
 
 //------------------------------------------------------------------------
 // categoryExists
@@ -90,7 +106,10 @@ func boardWidget(win fyne.Window) fyne.Widget {
 
 	var columns []fyne.CanvasObject = nil
 	if curr_board != nil {
-		for _, v := range curr_board.Categories {
+		for idx, v := range curr_board.Categories {
+			if idx != 0 {
+				columns = append(columns, addSwapper(idx, idx-1))
+			}
 			columns = append(columns, categoryGUI(win, v))
 		}
 	}

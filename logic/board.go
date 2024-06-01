@@ -8,6 +8,8 @@
 
 package logic
 
+import "reflect"
+
 //------------------------------------------------------------------------
 // Define a Board Type
 //------------------------------------------------------------------------
@@ -63,6 +65,16 @@ func (b *Board) AddCategories(categories ...*Category) {
 		return
 	}
 	b.Categories = append(b.Categories, categories...)
+}
+
+//------------------------------------------------------------------------
+// SwapCategories
+//------------------------------------------------------------------------
+// Swaps the categories at the given indeces
+
+func (b *Board) SwapCategories(idx1, idx2 int) {
+	categorySwapper := reflect.Swapper(b.Categories)
+	categorySwapper(idx1, idx2)
 }
 
 //------------------------------------------------------------------------
