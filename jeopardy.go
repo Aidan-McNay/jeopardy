@@ -1,12 +1,12 @@
 package main
 
 import (
-	"gui"
-	"logic"
+	"jeopardy/gui"
+	"jeopardy/logic"
 
+	"fyne.io/fyne/v2"
 	"fyne.io/fyne/v2/app"
 	"fyne.io/fyne/v2/container"
-	"fyne.io/fyne/v2/widget"
 )
 
 func main() {
@@ -14,11 +14,11 @@ func main() {
 	myWindow := myApp.NewWindow("Jeopardy Editor")
 
 	toolbar := gui.Toolbar(myWindow)
+	grid := gui.BoardGUI()
 
-	label := widget.NewLabel("No Board Selected")
-	logic.OnBoardChange(func(board *logic.Board) { label.SetText(board.Name) })
-
-	content := container.NewBorder(toolbar, nil, nil, nil, label)
+	content := container.NewBorder(toolbar, nil, nil, nil, grid)
+	logic.OnBoardChange(func(board *logic.Board) { content.Refresh() })
 	myWindow.SetContent(content)
+	myWindow.Resize(fyne.NewSize(1000, 600))
 	myWindow.ShowAndRun()
 }

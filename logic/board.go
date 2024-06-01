@@ -27,6 +27,33 @@ func MakeBoard(name string) *Board {
 }
 
 //------------------------------------------------------------------------
+// Derived Attributes
+//------------------------------------------------------------------------
+
+func (b *Board) Width() int {
+	if b == nil {
+		return 0
+	}
+	return len(b.Categories)
+}
+
+func (b *Board) Height() int {
+	if b == nil {
+		return 0
+	}
+	if len(b.Categories) == 0 {
+		return 0
+	}
+	curr_height := b.Categories[0].Height()
+	for _, v := range b.Categories {
+		if h := v.Height(); h > curr_height {
+			curr_height = h
+		}
+	}
+	return curr_height
+}
+
+//------------------------------------------------------------------------
 // AddCategories
 //------------------------------------------------------------------------
 // Appends a new category(s)

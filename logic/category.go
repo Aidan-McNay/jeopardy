@@ -28,6 +28,17 @@ func MakeCategory(name string) *Category {
 }
 
 //------------------------------------------------------------------------
+// Derived Attributes
+//------------------------------------------------------------------------
+
+func (c *Category) Height() int {
+	if c == nil {
+		return 0
+	}
+	return 1 + len(c.Questions)
+}
+
+//------------------------------------------------------------------------
 // AddQuestions
 //------------------------------------------------------------------------
 // Insert new question(s), such that the slice of questions remains sorted

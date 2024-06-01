@@ -9,10 +9,14 @@
 package gui
 
 import (
+	"image/color"
+	"jeopardy/logic"
 	"log"
-	"logic"
+	"net/url"
 
 	"fyne.io/fyne/v2"
+	"fyne.io/fyne/v2/canvas"
+	"fyne.io/fyne/v2/container"
 	"fyne.io/fyne/v2/dialog"
 	"fyne.io/fyne/v2/storage"
 	"fyne.io/fyne/v2/theme"
@@ -77,6 +81,52 @@ func saveToFile(win fyne.Window) {
 }
 
 //------------------------------------------------------------------------
+// Help Window
+//------------------------------------------------------------------------
+
+func showHelp() {
+	titleText := canvas.NewText("Jeopardy", color.White)
+	titleText.Alignment = fyne.TextAlignCenter
+	titleText.TextStyle = fyne.TextStyle{Bold: true}
+	titleText.TextSize = 30
+
+	authorText := widget.NewLabel("Author: Aidan McNay")
+	authorText.Alignment = fyne.TextAlignCenter
+
+	descriptionText := widget.NewLabel(
+		"A platform for creating, storing, and running Jeopardy-like games. " +
+			"Users can customize questions and categories, as well as the " +
+			"overall theme of the game",
+	)
+	descriptionText.Alignment = fyne.TextAlignCenter
+
+	sourceURL, _ := url.Parse("https://github.com/Aidan-McNay/jeopardy")
+	sourceLink := widget.NewHyperlink("Reference/Source code",
+		sourceURL,
+	)
+	sourceLink.Alignment = fyne.TextAlignCenter
+
+	disclaimerText := widget.NewLabel(
+		"Disclaimer: This project is not affiliated with JEOPARDY!™",
+	)
+	disclaimerText.Alignment = fyne.TextAlignCenter
+	disclaimerText.TextStyle = fyne.TextStyle{Italic: true}
+
+	content := container.NewVBox(
+		titleText,
+		authorText,
+		descriptionText,
+		sourceLink,
+		disclaimerText,
+	)
+	content.Resize(fyne.NewSize(200, 100))
+
+	w := fyne.CurrentApp().NewWindow("Information")
+	w.SetContent(content)
+	w.Show()
+}
+
+//------------------------------------------------------------------------
 // Main Toolbar
 //------------------------------------------------------------------------
 
@@ -103,7 +153,7 @@ func Toolbar(win fyne.Window) *widget.Toolbar {
 			log.Println("Settings clicked")
 		}),
 		widget.NewToolbarAction(theme.HelpIcon(), func() {
-			log.Println("Help clicked")
+			showHelp()
 		}),
 	)
 }

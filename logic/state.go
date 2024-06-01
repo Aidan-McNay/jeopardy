@@ -9,7 +9,7 @@
 package logic
 
 import (
-	"file"
+	"jeopardy/file"
 	"log"
 
 	"fyne.io/fyne/v2"
@@ -83,7 +83,7 @@ func getCorrectExtension(fileWriter fyne.URIWriteCloser) fyne.URIWriteCloser {
 //------------------------------------------------------------------------
 
 func LoadCurrBoard(fileReader fyne.URIReadCloser) {
-	file.Load(fileReader, currBoard)
+	file.Load(fileReader, &currBoard)
 	BoardChange()
 }
 
