@@ -17,7 +17,10 @@ func main() {
 	grid := gui.BoardGUI()
 
 	content := container.NewBorder(toolbar, nil, nil, nil, grid)
-	logic.OnBoardChange(func(board *logic.Board) { content.Refresh() })
+	logic.OnBoardChange(func(board *logic.Board) {
+		gui.UpdateBoard(grid)
+		content.Refresh()
+	})
 	myWindow.SetContent(content)
 	myWindow.Resize(fyne.NewSize(1000, 600))
 	myWindow.ShowAndRun()

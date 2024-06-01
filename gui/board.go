@@ -9,57 +9,78 @@
 package gui
 
 import (
+	"image/color"
 	"jeopardy/logic"
+	"log"
 
 	"fyne.io/fyne/v2"
+	"fyne.io/fyne/v2/canvas"
+	"fyne.io/fyne/v2/container"
+	"fyne.io/fyne/v2/layout"
 	"fyne.io/fyne/v2/widget"
 )
 
 //------------------------------------------------------------------------
-// Current Length of the Table
+// addCategoryButton
 //------------------------------------------------------------------------
+// A button that adds a new category
 
-func rowCount() int {
-	return logic.GetCurrBoard().Height() + 1
-}
-
-func colCount() int {
-	return logic.GetCurrBoard().Width() + 1
-}
-
-//------------------------------------------------------------------------
-// Template Cell
-//------------------------------------------------------------------------
-
-func templateCell() fyne.CanvasObject {
-	return widget.NewLabel("Jeopardy Cell")
+func addCategoryButton() *fyne.Container {
+	button := widget.NewButton("Add Category", func() {
+		log.Println("Category Added")
+	})
+	button.Importance = widget.SuccessImportance
+	return container.NewVBox(button, layout.NewSpacer())
 }
 
 //------------------------------------------------------------------------
-// Update Cells
+// Make a new widget to represent a board
 //------------------------------------------------------------------------
 
-func updateCell(i widget.TableCellID, o fyne.CanvasObject) {
+var titleColor color.Color = color.RGBA{41, 111, 246, 255}
+
+func boardWidget() fyne.Widget {
 	curr_board := logic.GetCurrBoard()
-	if i.Col < curr_board.Width() {
-		updateCategoryCell(curr_board.Categories[i.Col], i, o)
-	} else if i.Row == 0 {
-		o.(*widget.Label).SetText("Add New Category")
-	} else {
-		o.(*widget.Label).SetText("")
+
+	var columns []fyne.CanvasObject = nil
+	if curr_board != nil {
+		for _, v := range curr_board.Categories {
+			columns = append(columns, categoryGUI(v))
+		}
 	}
+	columns = append(columns, addCategoryButton())
+	gridLayout := container.NewHBox(columns...)
+
+	var boardLayout fyne.CanvasObject
+	if curr_board == nil {
+		label := widget.NewLabel("No Current Board")
+		label.Alignment = fyne.TextAlignCenter
+		boardLayout = label
+	} else {
+		nameText := canvas.NewText(curr_board.Name, titleColor)
+		nameText.Alignment = fyne.TextAlignCenter
+		nameText.TextStyle = fyne.TextStyle{Bold: true}
+		nameText.TextSize = 20
+		boardLayout = container.NewVBox(nameText, gridLayout)
+	}
+	scrollWidget := container.NewScroll(boardLayout)
+	return scrollWidget
 }
 
 //------------------------------------------------------------------------
-// Make a New Table
+// Make a new Board element (as a layout)
 //------------------------------------------------------------------------
 
-func BoardGUI() *widget.Table {
-	return widget.NewTable(
-		func() (int, int) {
-			return rowCount(), colCount()
-		},
-		templateCell,
-		updateCell,
-	)
+func BoardGUI() *fyne.Container {
+	board := boardWidget()
+	return container.NewStack(board)
+}
+
+//------------------------------------------------------------------------
+// Allow for updating the board Widget
+//------------------------------------------------------------------------
+
+func UpdateBoard(board *fyne.Container) {
+	board.RemoveAll()
+	board.Add(boardWidget())
 }

@@ -11,21 +11,40 @@ package gui
 import (
 	"fmt"
 	"jeopardy/logic"
+	"log"
 
 	"fyne.io/fyne/v2"
+	"fyne.io/fyne/v2/container"
+	"fyne.io/fyne/v2/layout"
 	"fyne.io/fyne/v2/widget"
 )
 
 //------------------------------------------------------------------------
-// Update a Cell
+// addQuestionButton
 //------------------------------------------------------------------------
-// This assumes that we are in the correct column
+// A button that adds a question to the given category
 
-func updateCategoryCell(category *logic.Category, i widget.TableCellID, o fyne.CanvasObject) {
-	if i.Row == 0 {
-		o.(*widget.Label).SetText(category.Name)
-	} else if q_idx := i.Row - 1; q_idx < len(category.Questions) {
-		string_of_points := fmt.Sprintf("%v", category.Questions[q_idx].Points)
-		o.(*widget.Label).SetText(string_of_points)
+func addQuestionButton() fyne.CanvasObject {
+	button := widget.NewButton("Add Question", func() {
+		log.Println("Question Added")
+	})
+	button.Importance = widget.HighImportance
+	return button
+}
+
+//------------------------------------------------------------------------
+// Make a new Category element
+//------------------------------------------------------------------------
+
+func categoryGUI(category *logic.Category) fyne.CanvasObject {
+	var rows []fyne.CanvasObject = nil
+
+	rows = append(rows, widget.NewLabel(category.Name))
+	for _, v := range category.Questions {
+		displayText := fmt.Sprintf("%v", v.Points)
+		rows = append(rows, widget.NewLabel(displayText))
 	}
+	rows = append(rows, addQuestionButton())
+	rows = append(rows, layout.NewSpacer())
+	return container.NewVBox(rows...)
 }
