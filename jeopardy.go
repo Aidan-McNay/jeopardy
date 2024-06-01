@@ -14,11 +14,11 @@ func main() {
 	myWindow := myApp.NewWindow("Jeopardy Editor")
 
 	toolbar := gui.Toolbar(myWindow)
-	grid := gui.BoardGUI()
+	grid := gui.BoardGUI(myWindow)
 
 	content := container.NewBorder(toolbar, nil, nil, nil, grid)
 	logic.OnBoardChange(func(board *logic.Board) {
-		gui.UpdateBoard(grid)
+		gui.UpdateBoard(grid, myWindow)
 		content.Refresh()
 	})
 	myWindow.SetContent(content)
