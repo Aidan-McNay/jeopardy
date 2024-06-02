@@ -11,6 +11,7 @@ package gui
 import (
 	"image/color"
 	"jeopardy/logic"
+	"jeopardy/style"
 	"log"
 	"net/url"
 
@@ -160,7 +161,7 @@ func Toolbar(win fyne.Window) *widget.Toolbar {
 		}),
 		widget.NewToolbarSeparator(),
 		widget.NewToolbarAction(theme.SettingsIcon(), func() {
-			log.Println("Settings clicked")
+			style.ColorDialog(win)
 		}),
 		widget.NewToolbarAction(theme.HelpIcon(), func() {
 			showHelp()

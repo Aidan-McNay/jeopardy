@@ -3,6 +3,7 @@ package main
 import (
 	"jeopardy/gui"
 	"jeopardy/logic"
+	"jeopardy/style"
 
 	"fyne.io/fyne/v2"
 	"fyne.io/fyne/v2/app"
@@ -10,8 +11,9 @@ import (
 )
 
 func main() {
-	myApp := app.New()
+	myApp := app.NewWithID("github.com.Aidan-McNay.jeopardy")
 	myWindow := myApp.NewWindow("Jeopardy Editor")
+	style.InitTheme(myApp)
 
 	toolbar := gui.Toolbar(myWindow)
 	grid := gui.BoardGUI(myWindow)

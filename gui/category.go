@@ -12,6 +12,7 @@ import (
 	"errors"
 	"fmt"
 	"jeopardy/logic"
+	"jeopardy/style"
 	"strconv"
 
 	"fyne.io/fyne/v2"
@@ -198,8 +199,13 @@ func addQuestionButton(win fyne.Window, category *logic.Category) fyne.CanvasObj
 	button := widget.NewButton("Add Question", func() {
 		addQuestion(win, category)
 	})
-	button.Importance = widget.HighImportance
-	return button
+
+	currTheme := fyne.CurrentApp().Settings().Theme()
+	variant := fyne.CurrentApp().Settings().ThemeVariant()
+	color := currTheme.Color("question", variant)
+
+	colorButton, _ := style.ColorButton(button, color)
+	return colorButton
 }
 
 //------------------------------------------------------------------------
