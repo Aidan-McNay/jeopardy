@@ -12,7 +12,6 @@ import (
 	"errors"
 	"fmt"
 	"jeopardy/logic"
-	"log"
 	"strconv"
 
 	"fyne.io/fyne/v2"
@@ -26,14 +25,69 @@ import (
 )
 
 //------------------------------------------------------------------------
+// otherCategoryExists
+//------------------------------------------------------------------------
+// Checks whether a category name already exists, if it's not our original
+// name
+
+func otherCategoryExists(origName string) func(name string) error {
+	return func(name string) error {
+		board := logic.GetCurrBoard()
+		if board == nil {
+			return nil
+		}
+		for _, v := range board.Categories {
+			if (name == v.Name) && (name != origName) {
+				errorText := fmt.Sprintf("%v already exists", name)
+				return errors.New(errorText)
+			}
+		}
+		return nil
+	}
+}
+
+//------------------------------------------------------------------------
+// editCategory
+//------------------------------------------------------------------------
+// Creates a dialogue to edit the category
+
+func editCategory(win fyne.Window, category *logic.Category) {
+	newName := widget.NewEntry()
+	newName.SetText(category.Name)
+	newName.Validator = validation.NewAllStrings(
+		validation.NewRegexp(`^.+$`, "Category must have a non-empty name"),
+		otherCategoryExists(category.Name),
+	)
+
+	items := []*widget.FormItem{
+		widget.NewFormItem("Category Name", newName),
+	}
+	onConfirm := func(b bool) {
+		if !b {
+			return
+		}
+		category.Name = newName.Text
+		logic.BoardChange()
+	}
+	prompt := dialog.NewForm("Edit Category", "Save", "Cancel", items,
+		onConfirm, win)
+
+	var height float32 = prompt.MinSize().Height
+	var width float32 = 400
+	newSize := fyne.NewSize(width, height)
+	prompt.Resize(newSize)
+
+	prompt.Show()
+}
+
+//------------------------------------------------------------------------
 // categoryButton
 //------------------------------------------------------------------------
-// Creates the button to edit a category, as well as buttons on the side
-// to shift the category location
+// Creates the button to edit a category
 
-func categoryButton(category *logic.Category) fyne.CanvasObject {
+func categoryButton(win fyne.Window, category *logic.Category) fyne.CanvasObject {
 	name := widget.NewButton(category.Name, func() {
-		log.Printf("%v category pressed", category.Name)
+		editCategory(win, category)
 	})
 	name.Importance = widget.LowImportance
 
@@ -90,8 +144,15 @@ func addQuestion(win fyne.Window, category *logic.Category) {
 	}
 
 	formTitle := fmt.Sprintf("New Question for %v", category.Name)
-	dialog.ShowForm(formTitle, "Add Question", "Cancel", items,
+	prompt := dialog.NewForm(formTitle, "Add Question", "Cancel", items,
 		onConfirm, win)
+
+	var height float32 = prompt.MinSize().Height
+	var width float32 = 400
+	newSize := fyne.NewSize(width, height)
+	prompt.Resize(newSize)
+
+	prompt.Show()
 }
 
 //------------------------------------------------------------------------
@@ -114,10 +175,9 @@ func addQuestionButton(win fyne.Window, category *logic.Category) fyne.CanvasObj
 func categoryGUI(win fyne.Window, category *logic.Category) fyne.CanvasObject {
 	var rows []fyne.CanvasObject = nil
 
-	rows = append(rows, categoryButton(category))
+	rows = append(rows, categoryButton(win, category))
 	for _, v := range category.Questions {
-		displayText := fmt.Sprintf("%v", v.Points)
-		rows = append(rows, widget.NewLabel(displayText))
+		rows = append(rows, questionButton(win, v))
 	}
 	rows = append(rows, addQuestionButton(win, category))
 	rows = append(rows, layout.NewSpacer())

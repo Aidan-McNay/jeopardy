@@ -17,6 +17,7 @@ import (
 	"fyne.io/fyne/v2"
 	"fyne.io/fyne/v2/canvas"
 	"fyne.io/fyne/v2/container"
+	"fyne.io/fyne/v2/data/validation"
 	"fyne.io/fyne/v2/dialog"
 	"fyne.io/fyne/v2/storage"
 	"fyne.io/fyne/v2/theme"
@@ -29,6 +30,8 @@ import (
 
 func promptNewBoard(win fyne.Window) {
 	newName := widget.NewEntry()
+	newName.Validator = validation.NewRegexp(`^.+$`, "Board must have a non-empty name")
+
 	items := []*widget.FormItem{
 		widget.NewFormItem("Board Name", newName),
 	}
@@ -38,8 +41,15 @@ func promptNewBoard(win fyne.Window) {
 		}
 		logic.NewBoard(newName.Text)
 	}
-	dialog.ShowForm("New Board", "Create New Board", "Cancel", items,
+	prompt := dialog.NewForm("New Board", "Create New Board", "Cancel", items,
 		onConfirm, win)
+
+	var height float32 = prompt.MinSize().Height
+	var width float32 = 400
+	newSize := fyne.NewSize(width, height)
+	prompt.Resize(newSize)
+
+	prompt.Show()
 }
 
 //------------------------------------------------------------------------

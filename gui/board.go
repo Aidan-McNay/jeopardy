@@ -69,6 +69,7 @@ func addCategory(win fyne.Window) {
 		validation.NewRegexp(`^.+$`, "Category must have a non-empty name"),
 		categoryExists,
 	)
+
 	items := []*widget.FormItem{
 		widget.NewFormItem("Category Name", newName),
 	}
@@ -80,8 +81,16 @@ func addCategory(win fyne.Window) {
 		board.Categories = append(board.Categories, logic.MakeCategory(newName.Text))
 		logic.BoardChange()
 	}
-	dialog.ShowForm("New Category", "Add Category", "Cancel", items,
+
+	prompt := dialog.NewForm("New Category", "Add Category", "Cancel", items,
 		onConfirm, win)
+
+	var height float32 = prompt.MinSize().Height
+	var width float32 = 400
+	newSize := fyne.NewSize(width, height)
+	prompt.Resize(newSize)
+
+	prompt.Show()
 }
 
 //------------------------------------------------------------------------
