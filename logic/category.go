@@ -57,6 +57,21 @@ func (c *Category) AddQuestions(questions ...*Question) {
 }
 
 //------------------------------------------------------------------------
+// RemoveQuestion
+//------------------------------------------------------------------------
+// Removes the given question by pointer
+
+func (c *Category) RemoveQuestion(question *Question) {
+	var newQuestions [](*Question) = nil
+	for _, v := range c.Questions {
+		if v != question {
+			newQuestions = append(newQuestions, v)
+		}
+	}
+	c.Questions = newQuestions
+}
+
+//------------------------------------------------------------------------
 // MaxPoints
 //------------------------------------------------------------------------
 // Returns the maximum points of any question in the category

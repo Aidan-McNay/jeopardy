@@ -17,15 +17,44 @@ import (
 	"fyne.io/fyne/v2"
 	"fyne.io/fyne/v2/data/validation"
 	"fyne.io/fyne/v2/dialog"
+	"fyne.io/fyne/v2/theme"
 	"fyne.io/fyne/v2/widget"
 )
+
+//------------------------------------------------------------------------
+// deleteQuestion
+//------------------------------------------------------------------------
+// Creates a dialogue to confirm deletion of a question
+
+func deleteQuestion(question *logic.Question,
+	category *logic.Category,
+	form *dialog.FormDialog,
+	win fyne.Window,
+) {
+	deleteCallback := func(b bool) {
+		if b {
+			category.RemoveQuestion(question)
+			form.Hide()
+			logic.BoardChange()
+		}
+	}
+	dialog.ShowConfirm(
+		"Delete Question",
+		"Are you sure? This action can't be undone",
+		deleteCallback,
+		win,
+	)
+}
 
 //------------------------------------------------------------------------
 // editQuestion
 //------------------------------------------------------------------------
 // Creates a dialogue to edit the question
 
-func editQuestion(win fyne.Window, question *logic.Question) {
+func editQuestion(win fyne.Window,
+	category *logic.Category,
+	question *logic.Question,
+) {
 	newPrompt := widget.NewMultiLineEntry()
 	newPrompt.Validator = validation.NewRegexp(`^.+$`, "Prompt must be non-empty")
 	newPrompt.Text = question.Prompt
@@ -38,10 +67,15 @@ func editQuestion(win fyne.Window, question *logic.Question) {
 	newPoints.Validator = isInt
 	newPoints.Text = fmt.Sprintf("%v", question.Points)
 
+	deleteButton := widget.NewButtonWithIcon("", theme.CancelIcon(),
+		func() {})
+	deleteButton.Importance = widget.DangerImportance
+
 	items := []*widget.FormItem{
 		widget.NewFormItem("Prompt", newPrompt),
 		widget.NewFormItem("Answer", newAnswer),
 		widget.NewFormItem("Points", newPoints),
+		widget.NewFormItem("Delete Question?", deleteButton),
 	}
 	onConfirm := func(b bool) {
 		if !b {
@@ -56,6 +90,9 @@ func editQuestion(win fyne.Window, question *logic.Question) {
 	formTitle := "Edit Question"
 	prompt := dialog.NewForm(formTitle, "Save", "Cancel", items,
 		onConfirm, win)
+	deleteButton.OnTapped = func() {
+		deleteQuestion(question, category, prompt, win)
+	}
 
 	var height float32 = prompt.MinSize().Height
 	var width float32 = 400
@@ -70,10 +107,13 @@ func editQuestion(win fyne.Window, question *logic.Question) {
 //------------------------------------------------------------------------
 // Creates the button to edit a question
 
-func questionButton(win fyne.Window, question *logic.Question) fyne.CanvasObject {
+func questionButton(win fyne.Window,
+	category *logic.Category,
+	question *logic.Question,
+) fyne.CanvasObject {
 	displayText := fmt.Sprintf("%v", question.Points)
 	button := widget.NewButton(displayText, func() {
-		editQuestion(win, question)
+		editQuestion(win, category, question)
 	})
 	button.Importance = widget.LowImportance
 	return button

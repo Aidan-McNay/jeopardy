@@ -47,6 +47,31 @@ func otherCategoryExists(origName string) func(name string) error {
 }
 
 //------------------------------------------------------------------------
+// deleteCategory
+//------------------------------------------------------------------------
+// Creates a dialogue to confirm deletion of a category
+
+func deleteCategory(category *logic.Category,
+	form *dialog.FormDialog,
+	win fyne.Window,
+) {
+	deleteCallback := func(b bool) {
+		if b {
+			curr_board := logic.GetCurrBoard()
+			curr_board.RemoveCategory(category)
+			form.Hide()
+			logic.BoardChange()
+		}
+	}
+	dialog.ShowConfirm(
+		fmt.Sprintf("Delete %v", category.Name),
+		"Are you sure? This action can't be undone",
+		deleteCallback,
+		win,
+	)
+}
+
+//------------------------------------------------------------------------
 // editCategory
 //------------------------------------------------------------------------
 // Creates a dialogue to edit the category
@@ -59,8 +84,13 @@ func editCategory(win fyne.Window, category *logic.Category) {
 		otherCategoryExists(category.Name),
 	)
 
+	deleteButton := widget.NewButtonWithIcon("", theme.CancelIcon(),
+		func() {})
+	deleteButton.Importance = widget.DangerImportance
+
 	items := []*widget.FormItem{
 		widget.NewFormItem("Category Name", newName),
+		widget.NewFormItem("Delete Category?", deleteButton),
 	}
 	onConfirm := func(b bool) {
 		if !b {
@@ -69,8 +99,12 @@ func editCategory(win fyne.Window, category *logic.Category) {
 		category.Name = newName.Text
 		logic.BoardChange()
 	}
+
 	prompt := dialog.NewForm("Edit Category", "Save", "Cancel", items,
 		onConfirm, win)
+	deleteButton.OnTapped = func() {
+		deleteCategory(category, prompt, win)
+	}
 
 	var height float32 = prompt.MinSize().Height
 	var width float32 = 400
@@ -177,7 +211,7 @@ func categoryGUI(win fyne.Window, category *logic.Category) fyne.CanvasObject {
 
 	rows = append(rows, categoryButton(win, category))
 	for _, v := range category.Questions {
-		rows = append(rows, questionButton(win, v))
+		rows = append(rows, questionButton(win, category, v))
 	}
 	rows = append(rows, addQuestionButton(win, category))
 	rows = append(rows, layout.NewSpacer())

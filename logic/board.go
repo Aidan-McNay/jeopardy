@@ -78,6 +78,21 @@ func (b *Board) SwapCategories(idx1, idx2 int) {
 }
 
 //------------------------------------------------------------------------
+// RemoveCategory
+//------------------------------------------------------------------------
+// Removes the given category by pointer
+
+func (b *Board) RemoveCategory(category *Category) {
+	var newCategories [](*Category) = nil
+	for _, v := range b.Categories {
+		if v != category {
+			newCategories = append(newCategories, v)
+		}
+	}
+	b.Categories = newCategories
+}
+
+//------------------------------------------------------------------------
 // AddPlayers
 //------------------------------------------------------------------------
 // Appends a new player(s)

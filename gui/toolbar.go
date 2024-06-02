@@ -63,7 +63,7 @@ func loadFromFile(win fyne.Window) {
 			return
 		}
 		if reader == nil {
-			log.Println("Cancelled")
+			// Cancelled
 			return
 		}
 
@@ -80,7 +80,7 @@ func saveToFile(win fyne.Window) {
 			return
 		}
 		if writer == nil {
-			log.Println("Cancelled")
+			// Cancelled
 			return
 		}
 
