@@ -14,7 +14,6 @@ import (
 	"jeopardy/logic"
 
 	"fyne.io/fyne/v2"
-	"fyne.io/fyne/v2/canvas"
 	"fyne.io/fyne/v2/container"
 	"fyne.io/fyne/v2/dialog"
 	"fyne.io/fyne/v2/theme"
@@ -234,35 +233,6 @@ func InitTheme(app fyne.App) {
 }
 
 //------------------------------------------------------------------------
-// colorButton
-//------------------------------------------------------------------------
-// Gives a button a specific background color
-
-func ColorButton(button *widget.Button, bg color.Color) (fyne.CanvasObject, func(color.Color)) {
-	button.Importance = widget.LowImportance
-
-	backgroundRectangle := canvas.NewRectangle(bg)
-	backgroundRectangle.CornerRadius = theme.InputRadiusSize()
-	backgroundRectangle.StrokeWidth = 2
-
-	switch fyne.CurrentApp().Settings().ThemeVariant() {
-	case theme.VariantDark:
-		backgroundRectangle.StrokeColor = defaultLightBackgroundColor
-	case theme.VariantLight:
-		backgroundRectangle.StrokeColor = defaultDarkBackgroundColor
-	default:
-		backgroundRectangle.StrokeColor = defaultLightBackgroundColor
-	}
-	wrapper := container.NewStack(backgroundRectangle, button)
-
-	callback := func(newColor color.Color) {
-		backgroundRectangle.FillColor = newColor
-		wrapper.Refresh()
-	}
-	return wrapper, callback
-}
-
-//------------------------------------------------------------------------
 // Get the background color pointer, based on the current variant
 //------------------------------------------------------------------------
 
@@ -280,13 +250,12 @@ func getBackgroundColor() *color.Color {
 //------------------------------------------------------------------------
 // openColorPrompt
 //------------------------------------------------------------------------
-// Opens a color prompt, updating the given color and calling the given
-// callback
+// Opens a color prompt to update the given color
 
-func openColorPrompt(colorPtr *color.Color, callback func(color.Color), win fyne.Window) {
+func openColorPrompt(colorPtr *color.Color, callback func(), win fyne.Window) {
 	prompt := dialog.NewColorPicker("Pick a New Color", "", func(c color.Color) {
 		*colorPtr = c
-		callback(c)
+		callback()
 	}, win)
 	prompt.Advanced = true
 	prompt.SetColor(*colorPtr)
@@ -298,65 +267,74 @@ func openColorPrompt(colorPtr *color.Color, callback func(color.Color), win fyne
 //------------------------------------------------------------------------
 // Opens a dialogue for changing the theme
 
-func templateButton() *widget.Button {
-	return widget.NewButton("Click Me To Change", func() {})
-}
-
 func ColorDialog(win fyne.Window) {
-	backgroundColorTemplateButton := templateButton()
-	primaryColorTemplateButton := templateButton()
-	questionColorTemplateButton := templateButton()
-	categoryColorTemplateButton := templateButton()
+	tempBackgroundColor := *(getBackgroundColor())
+	tempPrimaryColor := primaryColor
+	tempQuestionColor := questionColor
+	tempCategoryColor := categoryColor
 
-	backgroundColorButton, backgroundCallback :=
-		ColorButton(
-			backgroundColorTemplateButton,
-			*(getBackgroundColor()),
-		)
-	primaryColorButton, primaryCallback :=
-		ColorButton(
-			primaryColorTemplateButton,
-			primaryColor,
-		)
-	questionColorButton, questionCallback :=
-		ColorButton(
-			questionColorTemplateButton,
-			questionColor,
-		)
-	categoryColorButton, categoryCallback :=
-		ColorButton(
-			categoryColorTemplateButton,
-			categoryColor,
-		)
+	backgroundColorButton := NewColorButton(
+		"Click Me To Change",
+		tempBackgroundColor,
+		func() {},
+	)
+	primaryColorButton := NewColorButton(
+		"Click Me To Change",
+		tempPrimaryColor,
+		func() {},
+	)
+	questionColorButton := NewColorButton(
+		"Click Me To Change",
+		tempQuestionColor,
+		func() {},
+	)
+	categoryColorButton := NewColorButton(
+		"Click Me To Change",
+		tempCategoryColor,
+		func() {},
+	)
 
-	backgroundColorTemplateButton.OnTapped = func() {
+	updateBackground := func() {
+		backgroundColorButton.SetColor(tempBackgroundColor)
+	}
+	updatePrimary := func() {
+		primaryColorButton.SetColor(tempPrimaryColor)
+	}
+	updateQuestion := func() {
+		questionColorButton.SetColor(tempQuestionColor)
+	}
+	updateCategory := func() {
+		categoryColorButton.SetColor(tempCategoryColor)
+	}
+
+	backgroundColorButton.OnTapped(func() {
 		openColorPrompt(
-			getBackgroundColor(),
-			backgroundCallback,
+			&tempBackgroundColor,
+			updateBackground,
 			win,
 		)
-	}
-	primaryColorTemplateButton.OnTapped = func() {
+	})
+	primaryColorButton.OnTapped(func() {
 		openColorPrompt(
-			&primaryColor,
-			primaryCallback,
+			&tempPrimaryColor,
+			updatePrimary,
 			win,
 		)
-	}
-	questionColorTemplateButton.OnTapped = func() {
+	})
+	questionColorButton.OnTapped(func() {
 		openColorPrompt(
-			&questionColor,
-			questionCallback,
+			&tempQuestionColor,
+			updateQuestion,
 			win,
 		)
-	}
-	categoryColorTemplateButton.OnTapped = func() {
+	})
+	categoryColorButton.OnTapped(func() {
 		openColorPrompt(
-			&categoryColor,
-			categoryCallback,
+			&tempCategoryColor,
+			updateCategory,
 			win,
 		)
-	}
+	})
 
 	// Create the main dailogue
 	buttons := container.NewVBox(
@@ -390,6 +368,10 @@ func ColorDialog(win fyne.Window) {
 		if !b {
 			return
 		}
+		*(getBackgroundColor()) = tempBackgroundColor
+		primaryColor = tempPrimaryColor
+		questionColor = tempQuestionColor
+		categoryColor = tempCategoryColor
 		storeColorPreferences(fyne.CurrentApp())
 		logic.BoardChange()
 	}

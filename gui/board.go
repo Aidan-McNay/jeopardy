@@ -13,6 +13,7 @@ import (
 	"fmt"
 	"jeopardy/assets"
 	"jeopardy/logic"
+	"jeopardy/style"
 
 	"fyne.io/fyne/v2"
 	"fyne.io/fyne/v2/canvas"
@@ -99,10 +100,13 @@ func addCategory(win fyne.Window) {
 // A button that adds a new category
 
 func addCategoryButton(win fyne.Window) *fyne.Container {
-	button := widget.NewButton("Add Category", func() {
+	currTheme := fyne.CurrentApp().Settings().Theme()
+	variant := fyne.CurrentApp().Settings().ThemeVariant()
+	color := currTheme.Color("category", variant)
+
+	button := style.NewColorButton("Add Category", color, func() {
 		addCategory(win)
 	})
-	button.Importance = widget.SuccessImportance
 	return container.NewVBox(button, layout.NewSpacer())
 }
 

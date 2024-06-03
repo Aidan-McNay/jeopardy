@@ -196,15 +196,13 @@ func addQuestion(win fyne.Window, category *logic.Category) {
 // A button that adds a question to the given category
 
 func addQuestionButton(win fyne.Window, category *logic.Category) fyne.CanvasObject {
-	button := widget.NewButton("Add Question", func() {
-		addQuestion(win, category)
-	})
-
 	currTheme := fyne.CurrentApp().Settings().Theme()
 	variant := fyne.CurrentApp().Settings().ThemeVariant()
 	color := currTheme.Color("question", variant)
 
-	colorButton, _ := style.ColorButton(button, color)
+	colorButton := style.NewColorButton("Add Question", color, func() {
+		addQuestion(win, category)
+	})
 	return colorButton
 }
 
