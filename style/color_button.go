@@ -79,6 +79,7 @@ type ColorButton struct {
 	widget.BaseWidget
 	Text      string
 	FillColor color.Color
+	TextSize  float32
 	OnTap     func()
 	hovered   bool
 }
@@ -94,6 +95,7 @@ func NewColorButton(title string, fillColor color.Color, onTap func()) *ColorBut
 	b := &ColorButton{
 		Text:      title,
 		FillColor: fillColor,
+		TextSize:  fyne.CurrentApp().Settings().Theme().Size("text"),
 		OnTap:     onTap,
 	}
 	b.ExtendBaseWidget(b)
@@ -123,6 +125,7 @@ func (b *ColorButton) CreateRenderer() fyne.WidgetRenderer {
 	)
 	text.Alignment = fyne.TextAlignCenter
 	text.TextStyle = fyne.TextStyle{Bold: true}
+	text.TextSize = b.TextSize
 
 	rectangle := &canvas.Rectangle{
 		FillColor: b.FillColor,
@@ -178,6 +181,18 @@ func (b *ColorButton) SetColor(color color.Color) {
 		return
 	}
 	b.FillColor = color
+	b.Refresh()
+}
+
+//------------------------------------------------------------------------
+// SetText updates the button's text
+//------------------------------------------------------------------------
+
+func (b *ColorButton) SetText(text string) {
+	if b.Text == text {
+		return
+	}
+	b.Text = text
 	b.Refresh()
 }
 
@@ -275,6 +290,7 @@ func (r *colorButtonRenderer) Refresh() {
 	r.rectangle.FillColor = r.button.FillColor
 	r.rectangle.CornerRadius = theme.InputRadiusSize()
 	r.text.Color = r.strokeColor()
+	r.text.TextSize = r.button.TextSize
 	canvas.Refresh(r.button)
 }
 

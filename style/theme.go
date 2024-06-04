@@ -28,6 +28,7 @@ var defaultLightBackgroundColor color.Color = color.NRGBA{0xfe, 0xfb, 0xea, 0xff
 var defaultDarkBackgroundColor color.Color = color.NRGBA{0x17, 0x17, 0x18, 0xff}
 
 var defaultPrimaryColor color.Color = color.NRGBA{0x29, 0x6f, 0xf6, 0xff}
+var defaultTitleColor color.Color = color.NRGBA{0x9c, 0x27, 0xb0, 0xff}
 var defaultQuestionColor color.Color = color.NRGBA{0x29, 0x6f, 0xf6, 0xff}
 var defaultCategoryColor color.Color = color.NRGBA{0x8b, 0xc3, 0x4a, 0xff}
 
@@ -36,6 +37,7 @@ var defaultCategoryColor color.Color = color.NRGBA{0x8b, 0xc3, 0x4a, 0xff}
 //------------------------------------------------------------------------
 
 const (
+	ColorNameTitle    fyne.ThemeColorName = "title"
 	ColorNameQuestion fyne.ThemeColorName = "question"
 	ColorNameCategory fyne.ThemeColorName = "category"
 )
@@ -48,6 +50,7 @@ var lightBackgroundColor color.Color = defaultLightBackgroundColor
 var darkBackgroundColor color.Color = defaultDarkBackgroundColor
 
 var primaryColor color.Color = defaultPrimaryColor
+var titleColor color.Color = defaultTitleColor
 var questionColor color.Color = defaultQuestionColor
 var categoryColor color.Color = defaultCategoryColor
 
@@ -73,6 +76,8 @@ func storeColorPreferences(a fyne.App) {
 		colorToIntList(darkBackgroundColor)
 	primaryColorElements :=
 		colorToIntList(primaryColor)
+	titleColorElements :=
+		colorToIntList(titleColor)
 	questionColorElements :=
 		colorToIntList(questionColor)
 	categoryColorElements :=
@@ -86,6 +91,8 @@ func storeColorPreferences(a fyne.App) {
 		darkBackgroundColorElements)
 	preferences.SetIntList(string(theme.ColorNamePrimary),
 		primaryColorElements)
+	preferences.SetIntList(string(ColorNameTitle),
+		titleColorElements)
 	preferences.SetIntList(string(ColorNameQuestion),
 		questionColorElements)
 	preferences.SetIntList(string(ColorNameCategory),
@@ -125,6 +132,11 @@ func loadColorPreferences(a fyne.App) {
 			string(theme.ColorNamePrimary),
 			colorToIntList(defaultPrimaryColor),
 		)
+	titleColorElements :=
+		preferences.IntListWithFallback(
+			string(ColorNameTitle),
+			colorToIntList(defaultTitleColor),
+		)
 	questionColorElements :=
 		preferences.IntListWithFallback(
 			string(ColorNameQuestion),
@@ -142,6 +154,8 @@ func loadColorPreferences(a fyne.App) {
 		intListToColor(darkBackgroundColorElements)
 	primaryColor =
 		intListToColor(primaryColorElements)
+	titleColor =
+		intListToColor(titleColorElements)
 	questionColor =
 		intListToColor(questionColorElements)
 	categoryColor =
@@ -192,6 +206,10 @@ func (m jeopardyTheme) Color(name fyne.ThemeColorName, variant fyne.ThemeVariant
 	// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 	// Jeopardy Button Colors
 	// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+	if name == ColorNameTitle {
+		return titleColor
+	}
 
 	if name == ColorNameQuestion {
 		return questionColor
@@ -270,6 +288,7 @@ func openColorPrompt(colorPtr *color.Color, callback func(), win fyne.Window) {
 func ColorDialog(win fyne.Window) {
 	tempBackgroundColor := *(getBackgroundColor())
 	tempPrimaryColor := primaryColor
+	tempTitleColor := titleColor
 	tempQuestionColor := questionColor
 	tempCategoryColor := categoryColor
 
@@ -281,6 +300,11 @@ func ColorDialog(win fyne.Window) {
 	primaryColorButton := NewColorButton(
 		"Click Me To Change",
 		tempPrimaryColor,
+		func() {},
+	)
+	titleColorButton := NewColorButton(
+		"Click Me To Change",
+		tempTitleColor,
 		func() {},
 	)
 	questionColorButton := NewColorButton(
@@ -299,6 +323,9 @@ func ColorDialog(win fyne.Window) {
 	}
 	updatePrimary := func() {
 		primaryColorButton.SetColor(tempPrimaryColor)
+	}
+	updateTitle := func() {
+		titleColorButton.SetColor(tempTitleColor)
 	}
 	updateQuestion := func() {
 		questionColorButton.SetColor(tempQuestionColor)
@@ -321,6 +348,13 @@ func ColorDialog(win fyne.Window) {
 			win,
 		)
 	})
+	titleColorButton.OnTapped(func() {
+		openColorPrompt(
+			&tempTitleColor,
+			updateTitle,
+			win,
+		)
+	})
 	questionColorButton.OnTapped(func() {
 		openColorPrompt(
 			&tempQuestionColor,
@@ -340,6 +374,7 @@ func ColorDialog(win fyne.Window) {
 	buttons := container.NewVBox(
 		backgroundColorButton,
 		primaryColorButton,
+		titleColorButton,
 		questionColorButton,
 		categoryColorButton,
 	)
@@ -348,6 +383,8 @@ func ColorDialog(win fyne.Window) {
 	backgroundText.Alignment = fyne.TextAlignTrailing
 	primaryText := widget.NewLabel("Primary Color")
 	primaryText.Alignment = fyne.TextAlignTrailing
+	titleText := widget.NewLabel("Title Color")
+	titleText.Alignment = fyne.TextAlignTrailing
 	questionText := widget.NewLabel("Question Color")
 	questionText.Alignment = fyne.TextAlignTrailing
 	categoryText := widget.NewLabel("Category Color")
@@ -356,6 +393,7 @@ func ColorDialog(win fyne.Window) {
 	prompts := container.NewVBox(
 		backgroundText,
 		primaryText,
+		titleText,
 		questionText,
 		categoryText,
 	)
@@ -370,6 +408,7 @@ func ColorDialog(win fyne.Window) {
 		}
 		*(getBackgroundColor()) = tempBackgroundColor
 		primaryColor = tempPrimaryColor
+		titleColor = tempTitleColor
 		questionColor = tempQuestionColor
 		categoryColor = tempCategoryColor
 		storeColorPreferences(fyne.CurrentApp())

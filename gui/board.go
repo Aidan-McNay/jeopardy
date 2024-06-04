@@ -16,7 +16,6 @@ import (
 	"jeopardy/style"
 
 	"fyne.io/fyne/v2"
-	"fyne.io/fyne/v2/canvas"
 	"fyne.io/fyne/v2/container"
 	"fyne.io/fyne/v2/data/validation"
 	"fyne.io/fyne/v2/dialog"
@@ -111,6 +110,64 @@ func addCategoryButton(win fyne.Window) *fyne.Container {
 }
 
 //------------------------------------------------------------------------
+// changeBoardName
+//------------------------------------------------------------------------
+// Changes the board's name
+
+func changeBoardName(win fyne.Window, refresh func()) {
+	newName := widget.NewEntry()
+	newName.Validator = validation.NewAllStrings(
+		validation.NewRegexp(`^.+$`, "Board must have a non-empty name"),
+	)
+
+	items := []*widget.FormItem{
+		widget.NewFormItem("Board Name", newName),
+	}
+	onConfirm := func(b bool) {
+		if !b {
+			return
+		}
+		board := logic.GetCurrBoard()
+		board.Name = newName.Text
+		refresh()
+	}
+
+	prompt := dialog.NewForm("Edit Board Name", "Save", "Cancel", items,
+		onConfirm, win)
+
+	var height float32 = prompt.MinSize().Height
+	var width float32 = 400
+	newSize := fyne.NewSize(width, height)
+	prompt.Resize(newSize)
+
+	prompt.Show()
+}
+
+//------------------------------------------------------------------------
+// boardNameButton
+//------------------------------------------------------------------------
+// A button that shows the board's name, as well as the ability to display
+// a dialog to change it
+
+func boardNameButton(win fyne.Window) fyne.CanvasObject {
+	currTheme := fyne.CurrentApp().Settings().Theme()
+	variant := fyne.CurrentApp().Settings().ThemeVariant()
+	color := currTheme.Color("title", variant)
+
+	button := style.NewColorButton(
+		logic.GetCurrBoard().Name,
+		color,
+		func() {})
+	button.TextSize = 20
+	button.OnTapped(func() {
+		changeBoardName(win, func() {
+			button.SetText(logic.GetCurrBoard().Name)
+		})
+	})
+	return button
+}
+
+//------------------------------------------------------------------------
 // Make a new widget to represent a board
 //------------------------------------------------------------------------
 
@@ -135,16 +192,7 @@ func boardWidget(win fyne.Window) fyne.Widget {
 		label.Alignment = fyne.TextAlignCenter
 		boardLayout = label
 	} else {
-		nameText := canvas.NewText(curr_board.Name, theme.PrimaryColor())
-		nameText.Alignment = fyne.TextAlignCenter
-		nameText.TextStyle = fyne.TextStyle{Bold: true}
-		nameText.TextSize = 20
-
-		nameBorder := canvas.NewRectangle(theme.BackgroundColor())
-		nameBorder.StrokeWidth = 2
-		nameBorder.StrokeColor = theme.PrimaryColor()
-
-		name := container.NewStack(nameBorder, nameText)
+		name := boardNameButton(win)
 		boardLayout = container.NewVBox(name, gridLayout)
 	}
 	scrollWidget := container.NewScroll(boardLayout)
