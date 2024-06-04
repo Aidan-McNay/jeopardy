@@ -110,6 +110,7 @@ func showHelp() {
 			"overall theme of the game",
 	)
 	descriptionText.Alignment = fyne.TextAlignCenter
+	descriptionText.Wrapping = fyne.TextWrapWord
 
 	sourceURL, _ := url.Parse("https://github.com/Aidan-McNay/jeopardy")
 	sourceLink := widget.NewHyperlink("Reference/Source code",

@@ -119,6 +119,7 @@ func changeBoardName(win fyne.Window, refresh func()) {
 	newName.Validator = validation.NewAllStrings(
 		validation.NewRegexp(`^.+$`, "Board must have a non-empty name"),
 	)
+	newName.Text = logic.GetCurrBoard().Name
 
 	items := []*widget.FormItem{
 		widget.NewFormItem("Board Name", newName),

@@ -289,8 +289,11 @@ func (r *colorButtonRenderer) Refresh() {
 	}
 	r.rectangle.FillColor = r.button.FillColor
 	r.rectangle.CornerRadius = theme.InputRadiusSize()
+
+	r.text.Text = r.button.Text
 	r.text.Color = r.strokeColor()
 	r.text.TextSize = r.button.TextSize
+
 	canvas.Refresh(r.button)
 }
 
