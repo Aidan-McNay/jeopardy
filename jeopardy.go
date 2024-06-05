@@ -16,11 +16,11 @@ func main() {
 	style.InitTheme(myApp)
 
 	toolbar := gui.Toolbar(myWindow)
-	grid := gui.BoardGUI(myWindow)
+	boardEditor := gui.BoardGUI(myWindow)
 
-	content := container.NewBorder(toolbar, nil, nil, nil, grid)
+	content := container.NewBorder(toolbar, nil, nil, nil, boardEditor)
 	logic.OnBoardChange(func(board *logic.Board) {
-		gui.UpdateBoard(grid, myWindow)
+		gui.UpdateBoard(boardEditor, myWindow)
 		content.Refresh()
 	})
 	myWindow.SetContent(content)

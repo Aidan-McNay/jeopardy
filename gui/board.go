@@ -193,8 +193,13 @@ func boardWidget(win fyne.Window) fyne.Widget {
 		label.Alignment = fyne.TextAlignCenter
 		boardLayout = label
 	} else {
+		players := widget.NewLabel("Hello, players!")
+		tabs := container.NewAppTabs(
+			container.NewTabItem("Board", gridLayout),
+			container.NewTabItem("Players", players),
+		)
 		name := boardNameButton(win)
-		boardLayout = container.NewVBox(name, gridLayout)
+		boardLayout = container.NewVBox(name, tabs)
 	}
 	scrollWidget := container.NewScroll(boardLayout)
 	return scrollWidget
