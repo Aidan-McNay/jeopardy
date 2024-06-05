@@ -194,10 +194,22 @@ func boardWidget(win fyne.Window) fyne.Widget {
 		boardLayout = label
 	} else {
 		players := widget.NewLabel("Hello, players!")
-		tabs := container.NewAppTabs(
-			container.NewTabItem("Board", gridLayout),
-			container.NewTabItem("Players", players),
+
+		spacerBoard := container.NewPadded(
+			widget.NewLabel(""),
 		)
+		spacerPlayers := container.NewPadded(
+			widget.NewLabel(""),
+		)
+
+		tabs := container.NewAppTabs(
+			container.NewTabItem("Board",
+				container.NewHBox(spacerBoard, gridLayout)),
+			container.NewTabItem("Players",
+				container.NewHBox(spacerPlayers, players)),
+		)
+		tabs.SetTabLocation(container.TabLocationLeading)
+
 		name := boardNameButton(win)
 		boardLayout = container.NewVBox(name, tabs)
 	}
