@@ -267,7 +267,7 @@ func (r *colorButtonRenderer) strokeColor() color.Color {
 //------------------------------------------------------------------------
 
 func getHighlightColor() color.Color {
-	switch fyne.CurrentApp().Settings().ThemeVariant() {
+	switch currVariant {
 	case theme.VariantDark:
 		return lightStrokeColor
 	case theme.VariantLight:
@@ -279,10 +279,7 @@ func getHighlightColor() color.Color {
 
 func (r *colorButtonRenderer) Refresh() {
 	if r.button.hovered {
-		r.rectangle.StrokeColor = blendColor(
-			theme.HoverColor(),
-			getHighlightColor(),
-		)
+		r.rectangle.StrokeColor = getHighlightColor()
 		r.rectangle.StrokeWidth = 2
 	} else {
 		r.rectangle.StrokeWidth = 0

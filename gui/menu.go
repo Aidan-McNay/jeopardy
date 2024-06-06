@@ -8,7 +8,10 @@
 
 package gui
 
-import "fyne.io/fyne/v2"
+import (
+	"fyne.io/fyne/v2"
+	"fyne.io/fyne/v2/theme"
+)
 
 //------------------------------------------------------------------------
 // Define a menu item based on a keyCallback
@@ -30,17 +33,23 @@ func menuItemFromCallback(name string, callback keyCallback) *fyne.MenuItem {
 
 func newBoardMenuItem(win fyne.Window) *fyne.MenuItem {
 	callback := newBoardShortcut(win)
-	return menuItemFromCallback("New Board", callback)
+	menuItem := menuItemFromCallback("New Board", callback)
+	menuItem.Icon = theme.ContentAddIcon()
+	return menuItem
 }
 
 func loadBoardMenuItem(win fyne.Window) *fyne.MenuItem {
 	callback := loadBoardShortcut(win)
-	return menuItemFromCallback("Open a Board", callback)
+	menuItem := menuItemFromCallback("Open a Board", callback)
+	menuItem.Icon = theme.FolderOpenIcon()
+	return menuItem
 }
 
 func saveBoardMenuItem(win fyne.Window) *fyne.MenuItem {
 	callback := saveBoardShortcut(win)
-	return menuItemFromCallback("Save a Board", callback)
+	menuItem := menuItemFromCallback("Save a Board", callback)
+	menuItem.Icon = theme.DocumentSaveIcon()
+	return menuItem
 }
 
 //------------------------------------------------------------------------

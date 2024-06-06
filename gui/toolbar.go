@@ -172,29 +172,48 @@ func showHelp() {
 //------------------------------------------------------------------------
 
 func Toolbar(win fyne.Window) *widget.Toolbar {
+	newBoardAction := widget.NewToolbarAction(theme.ContentAddIcon(), func() {
+		promptNewBoard(win)
+	})
+	loadBoardAction := widget.NewToolbarAction(theme.FolderOpenIcon(), func() {
+		loadFromFile(win)
+	})
+	saveBoardAction := widget.NewToolbarAction(theme.DocumentSaveIcon(), func() {
+		saveToFile(win)
+	})
+	styleBoardAction := widget.NewToolbarAction(theme.ColorPaletteIcon(), func() {
+		log.Println("Style clicked")
+	})
+	runBoardAction := widget.NewToolbarAction(theme.MediaPlayIcon(), func() {
+		log.Println("Play clicked")
+	})
+	settingsAction := widget.NewToolbarAction(theme.SettingsIcon(), func() {})
+	helpAction := widget.NewToolbarAction(theme.HelpIcon(), func() {
+		showHelp()
+	})
+
+	refreshIcons := func() {
+		newBoardAction.SetIcon(theme.ContentAddIcon())
+		loadBoardAction.SetIcon(theme.FolderOpenIcon())
+		saveBoardAction.SetIcon(theme.DocumentSaveIcon())
+		styleBoardAction.SetIcon(theme.ColorPaletteIcon())
+		runBoardAction.SetIcon(theme.MediaPlayIcon())
+		settingsAction.SetIcon(theme.SettingsIcon())
+		helpAction.SetIcon(theme.HelpIcon())
+	}
+	settingsAction.OnActivated = func() {
+		style.ColorDialog(win, refreshIcons)
+	}
+
 	return widget.NewToolbar(
-		widget.NewToolbarAction(theme.ContentAddIcon(), func() {
-			promptNewBoard(win)
-		}),
-		widget.NewToolbarAction(theme.FolderOpenIcon(), func() {
-			loadFromFile(win)
-		}),
-		widget.NewToolbarAction(theme.DocumentSaveIcon(), func() {
-			saveToFile(win)
-		}),
-		widget.NewToolbarAction(theme.ColorPaletteIcon(), func() {
-			log.Println("Style clicked")
-		}),
+		newBoardAction,
+		loadBoardAction,
+		saveBoardAction,
+		styleBoardAction,
 		widget.NewToolbarSpacer(),
-		widget.NewToolbarAction(theme.MediaPlayIcon(), func() {
-			log.Println("Play clicked")
-		}),
+		runBoardAction,
 		widget.NewToolbarSeparator(),
-		widget.NewToolbarAction(theme.SettingsIcon(), func() {
-			style.ColorDialog(win)
-		}),
-		widget.NewToolbarAction(theme.HelpIcon(), func() {
-			showHelp()
-		}),
+		settingsAction,
+		helpAction,
 	)
 }

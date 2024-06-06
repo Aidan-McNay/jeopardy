@@ -163,6 +163,17 @@ func loadColorPreferences(a fyne.App) {
 }
 
 //------------------------------------------------------------------------
+// Define our current custom theme variant
+//------------------------------------------------------------------------
+// Do this here, as global theme variants are being deprecated (I think?)
+
+var currVariant fyne.ThemeVariant = theme.VariantDark
+
+func SetVariant(variant fyne.ThemeVariant) {
+	currVariant = variant
+}
+
+//------------------------------------------------------------------------
 // Define our custom theme
 //------------------------------------------------------------------------
 // Largely inspired by https://docs.fyne.io/extend/custom-theme
@@ -180,7 +191,7 @@ func (m jeopardyTheme) Color(name fyne.ThemeColorName, variant fyne.ThemeVariant
 	// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 	if name == theme.ColorNameBackground {
-		if variant == theme.VariantLight {
+		if currVariant == theme.VariantLight {
 			return lightBackgroundColor
 		}
 		return darkBackgroundColor
@@ -223,7 +234,7 @@ func (m jeopardyTheme) Color(name fyne.ThemeColorName, variant fyne.ThemeVariant
 	// Otherwise, use the default
 	// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-	return theme.DefaultTheme().Color(name, variant)
+	return theme.DefaultTheme().Color(name, currVariant)
 }
 
 // Use the default Font/Icon/Size functions
@@ -247,6 +258,7 @@ func (m jeopardyTheme) Size(name fyne.ThemeSizeName) float32 {
 
 func InitTheme(app fyne.App) {
 	loadColorPreferences(app)
+	SetVariant(fyne.CurrentApp().Settings().ThemeVariant())
 	app.Settings().SetTheme(&jeopardyTheme{})
 }
 
@@ -255,7 +267,7 @@ func InitTheme(app fyne.App) {
 //------------------------------------------------------------------------
 
 func getBackgroundColor() *color.Color {
-	switch fyne.CurrentApp().Settings().ThemeVariant() {
+	switch currVariant {
 	case theme.VariantDark:
 		return &darkBackgroundColor
 	case theme.VariantLight:
@@ -285,7 +297,7 @@ func openColorPrompt(colorPtr *color.Color, callback func(), win fyne.Window) {
 //------------------------------------------------------------------------
 // Opens a dialogue for changing the theme
 
-func ColorDialog(win fyne.Window) {
+func ColorDialog(win fyne.Window, refreshToolbar func()) {
 	tempBackgroundColor := *(getBackgroundColor())
 	tempPrimaryColor := primaryColor
 	tempTitleColor := titleColor
@@ -397,9 +409,20 @@ func ColorDialog(win fyne.Window) {
 		questionText,
 		categoryText,
 	)
-	layout := container.NewHBox(
+	colorLayout := container.NewHBox(
 		prompts,
 		buttons,
+	)
+
+	darkButton := widget.NewButton("Dark", func() {})
+	lightButton := widget.NewButton("Light", func() {})
+	themes := container.NewGridWithColumns(2,
+		darkButton, lightButton,
+	)
+
+	layout := container.NewVBox(
+		colorLayout,
+		themes,
 	)
 
 	onConfirm := func(b bool) {
@@ -415,7 +438,7 @@ func ColorDialog(win fyne.Window) {
 		logic.BoardChange()
 	}
 
-	dialog.ShowCustomConfirm(
+	form := dialog.NewCustomConfirm(
 		"Change Editor Style",
 		"Save",
 		"Cancel",
@@ -423,4 +446,26 @@ func ColorDialog(win fyne.Window) {
 		onConfirm,
 		win,
 	)
+
+	// Also refresh the toolbar, to make sure that the icons have the
+	// correct color
+
+	darkButton.OnTapped = func() {
+		SetVariant(theme.VariantDark)
+		tempBackgroundColor = *(getBackgroundColor())
+		backgroundColorButton.SetColor(tempBackgroundColor)
+		form.Refresh()
+		logic.BoardChange()
+		refreshToolbar()
+	}
+	lightButton.OnTapped = func() {
+		SetVariant(theme.VariantLight)
+		tempBackgroundColor = *(getBackgroundColor())
+		backgroundColorButton.SetColor(tempBackgroundColor)
+		form.Refresh()
+		logic.BoardChange()
+		refreshToolbar()
+	}
+
+	form.Show()
 }
