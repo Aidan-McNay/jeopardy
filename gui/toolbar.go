@@ -26,10 +26,22 @@ import (
 )
 
 //------------------------------------------------------------------------
+// Keep track of whether we can create a popup
+//------------------------------------------------------------------------
+// Pop-ups are done by the user sequentially, so we don't need a mutex
+
+var canCreatePopup bool = true
+
+//------------------------------------------------------------------------
 // New Board Creation
 //------------------------------------------------------------------------
 
 func promptNewBoard(win fyne.Window) {
+	if !canCreatePopup {
+		return
+	}
+	canCreatePopup = false
+
 	newName := widget.NewEntry()
 	newName.Validator = validation.NewRegexp(`^.+$`, "Board must have a non-empty name")
 
@@ -37,6 +49,7 @@ func promptNewBoard(win fyne.Window) {
 		widget.NewFormItem("Board Name", newName),
 	}
 	onConfirm := func(b bool) {
+		canCreatePopup = true
 		if !b {
 			return
 		}
@@ -58,7 +71,13 @@ func promptNewBoard(win fyne.Window) {
 //------------------------------------------------------------------------
 
 func loadFromFile(win fyne.Window) {
+	if !canCreatePopup {
+		return
+	}
+	canCreatePopup = false
+
 	fd := dialog.NewFileOpen(func(reader fyne.URIReadCloser, err error) {
+		canCreatePopup = true
 		if err != nil {
 			dialog.ShowError(err, win)
 			return
@@ -75,7 +94,13 @@ func loadFromFile(win fyne.Window) {
 }
 
 func saveToFile(win fyne.Window) {
+	if !canCreatePopup {
+		return
+	}
+	canCreatePopup = false
+
 	fd := dialog.NewFileSave(func(writer fyne.URIWriteCloser, err error) {
+		canCreatePopup = true
 		if err != nil {
 			dialog.ShowError(err, win)
 			return
