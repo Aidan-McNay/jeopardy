@@ -106,7 +106,13 @@ func addCategoryButton(win fyne.Window) *fyne.Container {
 	button := style.NewColorButton("Add Category", color, func() {
 		addCategory(win)
 	})
-	return container.NewVBox(button, layout.NewSpacer())
+	return container.NewVBox(
+		button,
+		container.NewPadded(
+			widget.NewLabel(""),
+		),
+		layout.NewSpacer(),
+	)
 }
 
 //------------------------------------------------------------------------

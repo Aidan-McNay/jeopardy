@@ -32,15 +32,19 @@ import (
 
 var canCreatePopup bool = true
 
+func canOpenPopup() bool { return canCreatePopup }
+func openPopup()         { canCreatePopup = false }
+func closePopup()        { canCreatePopup = true }
+
 //------------------------------------------------------------------------
 // New Board Creation
 //------------------------------------------------------------------------
 
 func promptNewBoard(win fyne.Window) {
-	if !canCreatePopup {
+	if !canOpenPopup() {
 		return
 	}
-	canCreatePopup = false
+	openPopup()
 
 	newName := widget.NewEntry()
 	newName.Validator = validation.NewRegexp(`^.+$`, "Board must have a non-empty name")
@@ -49,7 +53,7 @@ func promptNewBoard(win fyne.Window) {
 		widget.NewFormItem("Board Name", newName),
 	}
 	onConfirm := func(b bool) {
-		canCreatePopup = true
+		closePopup()
 		if !b {
 			return
 		}
@@ -71,13 +75,13 @@ func promptNewBoard(win fyne.Window) {
 //------------------------------------------------------------------------
 
 func loadFromFile(win fyne.Window) {
-	if !canCreatePopup {
+	if !canOpenPopup() {
 		return
 	}
-	canCreatePopup = false
+	openPopup()
 
 	fd := dialog.NewFileOpen(func(reader fyne.URIReadCloser, err error) {
-		canCreatePopup = true
+		closePopup()
 		if err != nil {
 			dialog.ShowError(err, win)
 			return
@@ -94,13 +98,13 @@ func loadFromFile(win fyne.Window) {
 }
 
 func saveToFile(win fyne.Window) {
-	if !canCreatePopup {
+	if !canOpenPopup() {
 		return
 	}
-	canCreatePopup = false
+	openPopup()
 
 	fd := dialog.NewFileSave(func(writer fyne.URIWriteCloser, err error) {
-		canCreatePopup = true
+		closePopup()
 		if err != nil {
 			dialog.ShowError(err, win)
 			return

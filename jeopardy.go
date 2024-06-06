@@ -29,5 +29,6 @@ func main() {
 	myWindow.SetMainMenu(gui.MainMenu(myWindow))
 
 	myWindow.Resize(fyne.NewSize(1000, 600))
+	myWindow.SetMaster()
 	myWindow.ShowAndRun()
 }

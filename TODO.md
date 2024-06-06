@@ -1,0 +1,5 @@
+- Ya know, that whole "run" thing
+- Ligh/Dark button
+- Reset colors
+- Enforce one popup completely
+- Figure out images????
