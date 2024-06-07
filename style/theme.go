@@ -169,6 +169,10 @@ func loadColorPreferences(a fyne.App) {
 
 var currVariant fyne.ThemeVariant = theme.VariantDark
 
+func GetVariant() fyne.ThemeVariant {
+	return currVariant
+}
+
 func SetVariant(variant fyne.ThemeVariant) {
 	currVariant = variant
 }
@@ -297,7 +301,7 @@ func openColorPrompt(colorPtr *color.Color, callback func(), win fyne.Window) {
 //------------------------------------------------------------------------
 // Opens a dialogue for changing the theme
 
-func ColorDialog(win fyne.Window, refreshToolbar func()) {
+func ColorDialog(win fyne.Window) {
 	tempBackgroundColor := *(getBackgroundColor())
 	tempPrimaryColor := primaryColor
 	tempTitleColor := titleColor
@@ -409,20 +413,9 @@ func ColorDialog(win fyne.Window, refreshToolbar func()) {
 		questionText,
 		categoryText,
 	)
-	colorLayout := container.NewHBox(
+	layout := container.NewHBox(
 		prompts,
 		buttons,
-	)
-
-	darkButton := widget.NewButton("Dark", func() {})
-	lightButton := widget.NewButton("Light", func() {})
-	themes := container.NewGridWithColumns(2,
-		darkButton, lightButton,
-	)
-
-	layout := container.NewVBox(
-		colorLayout,
-		themes,
 	)
 
 	onConfirm := func(b bool) {
@@ -446,26 +439,6 @@ func ColorDialog(win fyne.Window, refreshToolbar func()) {
 		onConfirm,
 		win,
 	)
-
-	// Also refresh the toolbar, to make sure that the icons have the
-	// correct color
-
-	darkButton.OnTapped = func() {
-		SetVariant(theme.VariantDark)
-		tempBackgroundColor = *(getBackgroundColor())
-		backgroundColorButton.SetColor(tempBackgroundColor)
-		form.Refresh()
-		logic.BoardChange()
-		refreshToolbar()
-	}
-	lightButton.OnTapped = func() {
-		SetVariant(theme.VariantLight)
-		tempBackgroundColor = *(getBackgroundColor())
-		backgroundColorButton.SetColor(tempBackgroundColor)
-		form.Refresh()
-		logic.BoardChange()
-		refreshToolbar()
-	}
 
 	form.Show()
 }

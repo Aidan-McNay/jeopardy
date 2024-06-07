@@ -6,3 +6,5 @@
 
 all:
 	fyne bundle --pkg assets --name ResourceSwapPng -o bundled.go icons/swap.svg
+	fyne bundle -a --name ResourceSunPng -o bundled.go icons/sun.svg
+	fyne bundle -a --name ResourceMoonPng -o bundled.go icons/moon.svg

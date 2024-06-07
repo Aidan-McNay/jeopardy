@@ -10,6 +10,7 @@ package gui
 
 import (
 	"image/color"
+	"jeopardy/assets"
 	"jeopardy/logic"
 	"jeopardy/style"
 	"log"
@@ -187,7 +188,10 @@ func Toolbar(win fyne.Window) *widget.Toolbar {
 	runBoardAction := widget.NewToolbarAction(theme.MediaPlayIcon(), func() {
 		log.Println("Play clicked")
 	})
-	settingsAction := widget.NewToolbarAction(theme.SettingsIcon(), func() {})
+	otherThemeAction := widget.NewToolbarAction(theme.SettingsIcon(), func() {})
+	settingsAction := widget.NewToolbarAction(theme.SettingsIcon(), func() {
+		style.ColorDialog(win)
+	})
 	helpAction := widget.NewToolbarAction(theme.HelpIcon(), func() {
 		showHelp()
 	})
@@ -200,9 +204,25 @@ func Toolbar(win fyne.Window) *widget.Toolbar {
 		runBoardAction.SetIcon(theme.MediaPlayIcon())
 		settingsAction.SetIcon(theme.SettingsIcon())
 		helpAction.SetIcon(theme.HelpIcon())
+
+		switch style.GetVariant() {
+		case theme.VariantDark:
+			otherThemeAction.SetIcon(theme.NewThemedResource(assets.ResourceSunPng))
+		default:
+			otherThemeAction.SetIcon(theme.NewThemedResource(assets.ResourceMoonPng))
+		}
 	}
-	settingsAction.OnActivated = func() {
-		style.ColorDialog(win, refreshIcons)
+	refreshIcons()
+
+	otherThemeAction.OnActivated = func() {
+		switch style.GetVariant() {
+		case theme.VariantDark:
+			style.SetVariant(theme.VariantLight)
+		default:
+			style.SetVariant(theme.VariantDark)
+		}
+		refreshIcons()
+		logic.BoardChange()
 	}
 
 	return widget.NewToolbar(
@@ -213,6 +233,7 @@ func Toolbar(win fyne.Window) *widget.Toolbar {
 		widget.NewToolbarSpacer(),
 		runBoardAction,
 		widget.NewToolbarSeparator(),
+		otherThemeAction,
 		settingsAction,
 		helpAction,
 	)

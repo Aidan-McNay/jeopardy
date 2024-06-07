@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   width="24"
+   height="24"
+   viewBox="0 0 24 24"
+   version="1.1"
+   id="svg136"
+   sodipodi:docname="moon.svg"
+   inkscape:version="1.2.1 (9c6d41e, 2022-07-14)"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <defs
+     id="defs140" />
+  <sodipodi:namedview
+     id="namedview138"
+     borderopacity="0.25"
+     inkscape:showpageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     showgrid="false"
+     inkscape:zoom="10.094956"
+     inkscape:cx="15.651381"
+     inkscape:cy="14.660787"
+     inkscape:window-width="1309"
+     inkscape:window-height="456"
+     inkscape:window-x="0"
+     inkscape:window-y="38"
+     inkscape:window-maximized="0"
+     inkscape:current-layer="svg136"
+     pagecolor="#ffffff"
+     bordercolor="#000000"
+     inkscape:deskcolor="#d1d1d1" />
+  <path
+     d="M0 0h24v24H0z"
+     fill="none"
+     id="path132" />
+  <path
+     d="M 23.276256,16.151185 C 23.153892,16.039392 22.974441,16.017456 22.82829,16.094628 18.643568,18.314111 13.507942,16.837803 11.138344,12.733425 8.7687458,8.6290465 10.05741,3.4439983 14.072195,0.92904242 14.212531,0.84129911 14.282567,0.67453396 14.246888,0.51305456 14.211474,0.35131086 14.078273,0.22921023 13.914151,0.20833155 11.312773,-0.1259916 8.736767,0.39121821 6.4631053,1.7041964 3.7129339,3.2912403 1.7455809,5.8553536 0.9236481,8.9229337 0.10171528,11.990514 0.52351746,15.194466 2.1116185,17.944902 c 1.5878368,2.750435 4.1516858,4.717788 7.2192659,5.539721 1.0243766,0.27433 2.0638176,0.410174 3.0966516,0.410174 2.060118,0 4.093543,-0.540203 5.925316,-1.59788 2.273134,-1.31245 4.0095,-3.285088 5.020662,-5.704901 0.06396,-0.152758 0.02484,-0.329037 -0.09726,-0.440831 z"
+     style="fill:#000000;fill-rule:nonzero;stroke:none;stroke-width:0.264287;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:10;stroke-dasharray:none"
+     stroke-linecap="round"
+     id="path423" />
+</svg>
