@@ -223,6 +223,7 @@ func Toolbar(win fyne.Window) *widget.Toolbar {
 		}
 		refreshIcons()
 		logic.BoardChange()
+		style.StoreColorPreferences(fyne.CurrentApp())
 	}
 
 	return widget.NewToolbar(

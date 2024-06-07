@@ -55,7 +55,22 @@ var questionColor color.Color = defaultQuestionColor
 var categoryColor color.Color = defaultCategoryColor
 
 //------------------------------------------------------------------------
-// storeColorPreferences
+// Define our current custom theme variant
+//------------------------------------------------------------------------
+// Do this here, as global theme variants are being deprecated (I think?)
+
+var currVariant fyne.ThemeVariant
+
+func GetVariant() fyne.ThemeVariant {
+	return currVariant
+}
+
+func SetVariant(variant fyne.ThemeVariant) {
+	currVariant = variant
+}
+
+//------------------------------------------------------------------------
+// StoreColorPreferences
 //------------------------------------------------------------------------
 // Stores our current colors using the preferences API, for later recall
 
@@ -69,7 +84,7 @@ func colorToIntList(c color.Color) []int {
 	}
 }
 
-func storeColorPreferences(a fyne.App) {
+func StoreColorPreferences(a fyne.App) {
 	lightBackgroundColorElements :=
 		colorToIntList(lightBackgroundColor)
 	darkBackgroundColorElements :=
@@ -97,6 +112,8 @@ func storeColorPreferences(a fyne.App) {
 		questionColorElements)
 	preferences.SetIntList(string(ColorNameCategory),
 		categoryColorElements)
+
+	preferences.SetInt("variant", int(currVariant))
 }
 
 //------------------------------------------------------------------------
@@ -160,21 +177,12 @@ func loadColorPreferences(a fyne.App) {
 		intListToColor(questionColorElements)
 	categoryColor =
 		intListToColor(categoryColorElements)
-}
 
-//------------------------------------------------------------------------
-// Define our current custom theme variant
-//------------------------------------------------------------------------
-// Do this here, as global theme variants are being deprecated (I think?)
-
-var currVariant fyne.ThemeVariant = theme.VariantDark
-
-func GetVariant() fyne.ThemeVariant {
-	return currVariant
-}
-
-func SetVariant(variant fyne.ThemeVariant) {
-	currVariant = variant
+	variantInt := preferences.IntWithFallback(
+		"variant",
+		int(theme.VariantDark),
+	)
+	currVariant = fyne.ThemeVariant(variantInt)
 }
 
 //------------------------------------------------------------------------
@@ -262,7 +270,6 @@ func (m jeopardyTheme) Size(name fyne.ThemeSizeName) float32 {
 
 func InitTheme(app fyne.App) {
 	loadColorPreferences(app)
-	SetVariant(fyne.CurrentApp().Settings().ThemeVariant())
 	app.Settings().SetTheme(&jeopardyTheme{})
 }
 
@@ -427,7 +434,7 @@ func ColorDialog(win fyne.Window) {
 		titleColor = tempTitleColor
 		questionColor = tempQuestionColor
 		categoryColor = tempCategoryColor
-		storeColorPreferences(fyne.CurrentApp())
+		StoreColorPreferences(fyne.CurrentApp())
 		logic.BoardChange()
 	}
 
