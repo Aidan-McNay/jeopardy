@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   width="24"
+   height="24"
+   viewBox="0 0 24 23.999999"
+   version="1.1"
+   id="svg5"
+   sodipodi:docname="J.svg"
+   inkscape:version="1.2.1 (9c6d41e, 2022-07-14)"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <defs
+     id="defs9" />
+  <sodipodi:namedview
+     id="namedview7"
+     pagecolor="#ffffff"
+     bordercolor="#000000"
+     borderopacity="0.25"
+     inkscape:showpageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1"
+     showgrid="false"
+     inkscape:zoom="23.563947"
+     inkscape:cx="11.30965"
+     inkscape:cy="9.2089834"
+     inkscape:window-width="1728"
+     inkscape:window-height="1080"
+     inkscape:window-x="0"
+     inkscape:window-y="37"
+     inkscape:window-maximized="0"
+     inkscape:current-layer="svg5" />
+  <rect
+     style="fill:#00add8;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:0;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:0"
+     id="rect344"
+     width="23.999998"
+     height="23.999998"
+     x="5e-07"
+     y="5e-07"
+     ry="3.7992754" />
+  <g
+     id="svgGroup"
+     stroke-linecap="round"
+     fill-rule="evenodd"
+     font-size="12px"
+     stroke="#000"
+     stroke-width="0.25mm"
+     fill="#000"
+     style="fill:#000000;stroke:#000000;stroke-width:0.25mm"
+     transform="matrix(0.23485528,0,0,0.23485528,-0.36171937,-0.36148571)"
+     inkscape:label="svgGroup">
+    <path
+       d="m 20.700682,62.975518 h 18.097986 q -0.406128,2.535873 2.100659,4.30689 a 8.674106,8.674106 0 0 0 0.323178,0.217606 10.685351,10.685351 0 0 0 3.065885,1.314259 q 1.347654,0.355496 2.931227,0.466454 a 21.302838,21.302838 0 0 0 1.489852,0.05063 q 4.739949,0 8.079458,-1.777481 A 9.9086468,9.9086468 0 0 0 58.5147,66.408748 q 1.740853,-1.463998 2.044641,-3.433231 L 67.346085,14.821951 H 84.797714 L 78.118696,62.97552 q -1.615892,11.742145 -10.934199,19.606151 -9.318308,7.864013 -21.706811,7.864013 a 31.097295,31.097295 0 0 1 -8.3143,-1.05249 22.697891,22.697891 0 0 1 -11.022536,-6.75766 22.083851,22.083851 0 0 1 -5.740724,-15.1032 q -0.02154,-2.197611 0.300556,-4.556814 z"
+       vector-effect="non-scaling-stroke"
+       id="path2"
+       style="stroke-width:0.269315mm" />
+  </g>
+</svg>

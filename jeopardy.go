@@ -1,6 +1,7 @@
 package main
 
 import (
+	"jeopardy/assets"
 	"jeopardy/gui"
 	"jeopardy/logic"
 	"jeopardy/style"
@@ -12,6 +13,8 @@ import (
 
 func main() {
 	myApp := app.NewWithID("github.com.Aidan-McNay.jeopardy")
+	myApp.SetIcon(assets.ResourceLogoPng)
+
 	myWindow := myApp.NewWindow("Jeopardy Editor")
 	style.InitTheme(myApp)
 
