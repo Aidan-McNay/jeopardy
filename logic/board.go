@@ -18,6 +18,7 @@ type Board struct {
 	Name       string
 	Categories [](*Category)
 	Players    [](*Player)
+	Style      *GameStyle
 }
 
 //------------------------------------------------------------------------
@@ -25,7 +26,7 @@ type Board struct {
 //------------------------------------------------------------------------
 
 func MakeBoard(name string) *Board {
-	return &Board{name, nil, nil}
+	return &Board{name, nil, nil, NewGameStyle()}
 }
 
 //------------------------------------------------------------------------

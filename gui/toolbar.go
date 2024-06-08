@@ -200,7 +200,7 @@ func Toolbar(win fyne.Window) *widget.Toolbar {
 		saveToFile(win, false)
 	})
 	styleBoardAction := widget.NewToolbarAction(theme.ColorPaletteIcon(), func() {
-		log.Println("Style clicked")
+		styleGUI(win)
 	})
 	runBoardAction := widget.NewToolbarAction(theme.MediaPlayIcon(), func() {
 		log.Println("Play clicked")
