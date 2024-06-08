@@ -44,13 +44,13 @@ func loadBoardMenuItem(win fyne.Window) *fyne.MenuItem {
 
 func saveBoardMenuItem(win fyne.Window) *fyne.MenuItem {
 	callback := saveBoardShortcut(win)
-	menuItem := menuItemFromCallback("Save Board", callback)
+	menuItem := menuItemFromCallback("Save", callback)
 	return menuItem
 }
 
 func saveAsBoardMenuItem(win fyne.Window) *fyne.MenuItem {
 	callback := saveAsBoardShortcut(win)
-	menuItem := menuItemFromCallback("Save Board As...", callback)
+	menuItem := menuItemFromCallback("Save As...", callback)
 	return menuItem
 }
 

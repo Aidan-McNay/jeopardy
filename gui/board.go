@@ -64,6 +64,7 @@ func categoryExists(name string) error {
 // Creates a dialogue to add a new category
 
 func addCategory(win fyne.Window) {
+	openPopup()
 	newName := widget.NewEntry()
 	newName.Validator = validation.NewAllStrings(
 		validation.NewRegexp(`^.+$`, "Category must have a non-empty name"),
@@ -74,6 +75,7 @@ func addCategory(win fyne.Window) {
 		widget.NewFormItem("Category Name", newName),
 	}
 	onConfirm := func(b bool) {
+		closePopup()
 		if !b {
 			return
 		}
@@ -121,6 +123,8 @@ func addCategoryButton(win fyne.Window) *fyne.Container {
 // Changes the board's name
 
 func changeBoardName(win fyne.Window, refresh func()) {
+	openPopup()
+
 	newName := widget.NewEntry()
 	newName.Validator = validation.NewAllStrings(
 		validation.NewRegexp(`^.+$`, "Board must have a non-empty name"),
@@ -131,6 +135,7 @@ func changeBoardName(win fyne.Window, refresh func()) {
 		widget.NewFormItem("Board Name", newName),
 	}
 	onConfirm := func(b bool) {
+		closePopup()
 		if !b {
 			return
 		}

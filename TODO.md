@@ -1,5 +1,4 @@
 - Ya know, that whole "run" thing
 - Reset colors
-- Enforce one popup completely
 - Figure out images????
 - Help as dialog, not new window

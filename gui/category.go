@@ -78,6 +78,7 @@ func deleteCategory(category *logic.Category,
 // Creates a dialogue to edit the category
 
 func editCategory(win fyne.Window, category *logic.Category) {
+	openPopup()
 	newName := widget.NewEntry()
 	newName.SetText(category.Name)
 	newName.Validator = validation.NewAllStrings(
@@ -94,6 +95,7 @@ func editCategory(win fyne.Window, category *logic.Category) {
 		widget.NewFormItem("Delete Category?", deleteButton),
 	}
 	onConfirm := func(b bool) {
+		closePopup()
 		if !b {
 			return
 		}
@@ -152,6 +154,8 @@ func isInt(s string) error {
 // Creates a dialogue to add a new question
 
 func addQuestion(win fyne.Window, category *logic.Category) {
+	openPopup()
+
 	newPrompt := widget.NewMultiLineEntry()
 	newPrompt.Validator = validation.NewRegexp(`^.+$`, "Prompt must be non-empty")
 
@@ -167,6 +171,7 @@ func addQuestion(win fyne.Window, category *logic.Category) {
 		widget.NewFormItem("Points", newPoints),
 	}
 	onConfirm := func(b bool) {
+		closePopup()
 		if !b {
 			return
 		}
