@@ -42,6 +42,7 @@ func closePopup()        { canCreatePopup = true }
 //------------------------------------------------------------------------
 
 var currURI fyne.URI = nil
+var haveABoard = false
 
 func promptNewBoard(win fyne.Window) {
 	if !canOpenPopup() {
@@ -61,6 +62,7 @@ func promptNewBoard(win fyne.Window) {
 			return
 		}
 		currURI = nil
+		haveABoard = true
 		logic.NewBoard(newName.Text)
 	}
 	prompt := dialog.NewForm("New Board", "Create New Board", "Cancel", items,
@@ -96,6 +98,7 @@ func loadFromFile(win fyne.Window) {
 		}
 
 		currURI = reader.URI()
+		haveABoard = true
 		logic.LoadCurrBoard(reader)
 	}, win)
 	fd.SetFilter(storage.NewExtensionFileFilter([]string{".jpdy"}))
@@ -103,6 +106,10 @@ func loadFromFile(win fyne.Window) {
 }
 
 func saveToFile(win fyne.Window, forceSaveAs bool) {
+	if !haveABoard {
+		// No board to save
+		return
+	}
 	if (currURI != nil) && !forceSaveAs {
 		writer, _ := storage.Writer(currURI)
 		logic.SaveCurrBoard(writer)
