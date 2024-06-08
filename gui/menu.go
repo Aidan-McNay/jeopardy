@@ -38,13 +38,19 @@ func newBoardMenuItem(win fyne.Window) *fyne.MenuItem {
 
 func loadBoardMenuItem(win fyne.Window) *fyne.MenuItem {
 	callback := loadBoardShortcut(win)
-	menuItem := menuItemFromCallback("Open a Board", callback)
+	menuItem := menuItemFromCallback("Open Board", callback)
 	return menuItem
 }
 
 func saveBoardMenuItem(win fyne.Window) *fyne.MenuItem {
 	callback := saveBoardShortcut(win)
-	menuItem := menuItemFromCallback("Save a Board", callback)
+	menuItem := menuItemFromCallback("Save Board", callback)
+	return menuItem
+}
+
+func saveAsBoardMenuItem(win fyne.Window) *fyne.MenuItem {
+	callback := saveAsBoardShortcut(win)
+	menuItem := menuItemFromCallback("Save Board As...", callback)
 	return menuItem
 }
 
@@ -57,6 +63,7 @@ func fileMenu(win fyne.Window) *fyne.Menu {
 		newBoardMenuItem(win),
 		loadBoardMenuItem(win),
 		saveBoardMenuItem(win),
+		saveAsBoardMenuItem(win),
 	}
 	return fyne.NewMenu(
 		"File",

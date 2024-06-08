@@ -41,6 +41,8 @@ func closePopup()        { canCreatePopup = true }
 // New Board Creation
 //------------------------------------------------------------------------
 
+var currURI fyne.URI = nil
+
 func promptNewBoard(win fyne.Window) {
 	if !canOpenPopup() {
 		return
@@ -58,6 +60,7 @@ func promptNewBoard(win fyne.Window) {
 		if !b {
 			return
 		}
+		currURI = nil
 		logic.NewBoard(newName.Text)
 	}
 	prompt := dialog.NewForm("New Board", "Create New Board", "Cancel", items,
@@ -92,13 +95,19 @@ func loadFromFile(win fyne.Window) {
 			return
 		}
 
+		currURI = reader.URI()
 		logic.LoadCurrBoard(reader)
 	}, win)
 	fd.SetFilter(storage.NewExtensionFileFilter([]string{".jpdy"}))
 	fd.Show()
 }
 
-func saveToFile(win fyne.Window) {
+func saveToFile(win fyne.Window, forceSaveAs bool) {
+	if (currURI != nil) && !forceSaveAs {
+		writer, _ := storage.Writer(currURI)
+		logic.SaveCurrBoard(writer)
+		return
+	}
 	if !canOpenPopup() {
 		return
 	}
@@ -116,6 +125,7 @@ func saveToFile(win fyne.Window) {
 		}
 
 		logic.SaveCurrBoard(writer)
+		currURI = writer.URI()
 	}, win)
 	fd.SetFilter(storage.NewExtensionFileFilter([]string{".jpdy"}))
 	fd.Show()
@@ -180,7 +190,7 @@ func Toolbar(win fyne.Window) *widget.Toolbar {
 		loadFromFile(win)
 	})
 	saveBoardAction := widget.NewToolbarAction(theme.DocumentSaveIcon(), func() {
-		saveToFile(win)
+		saveToFile(win, false)
 	})
 	styleBoardAction := widget.NewToolbarAction(theme.ColorPaletteIcon(), func() {
 		log.Println("Style clicked")

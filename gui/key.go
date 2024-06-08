@@ -83,7 +83,17 @@ func saveBoardShortcut(win fyne.Window) keyCallback {
 		fyne.KeyS,
 		fyne.KeyModifierShortcutDefault,
 		func() {
-			saveToFile(win)
+			saveToFile(win, false)
+		},
+	)
+}
+
+func saveAsBoardShortcut(win fyne.Window) keyCallback {
+	return NewCallback(
+		fyne.KeyS,
+		fyne.KeyModifierShortcutDefault|fyne.KeyModifierShift,
+		func() {
+			saveToFile(win, true)
 		},
 	)
 }
@@ -96,4 +106,5 @@ func AddTopLevelShortcuts(win fyne.Window) {
 	newBoardShortcut(win).addToWindow(win)
 	loadBoardShortcut(win).addToWindow(win)
 	saveBoardShortcut(win).addToWindow(win)
+	saveAsBoardShortcut(win).addToWindow(win)
 }

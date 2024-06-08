@@ -2,5 +2,4 @@
 - Reset colors
 - Enforce one popup completely
 - Figure out images????
-- Save As
-- Probably init()?
+- Help as dialog, not new window
