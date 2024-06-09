@@ -98,6 +98,16 @@ func saveAsBoardShortcut(win fyne.Window) keyCallback {
 	)
 }
 
+func styleShortcut(win fyne.Window) keyCallback {
+	return NewCallback(
+		fyne.KeyE,
+		fyne.KeyModifierShortcutDefault,
+		func() {
+			styleGUI(win)
+		},
+	)
+}
+
 //------------------------------------------------------------------------
 // Add the shortcuts to the top-level canvas
 //------------------------------------------------------------------------
@@ -107,4 +117,5 @@ func AddTopLevelShortcuts(win fyne.Window) {
 	loadBoardShortcut(win).addToWindow(win)
 	saveBoardShortcut(win).addToWindow(win)
 	saveAsBoardShortcut(win).addToWindow(win)
+	styleShortcut(win).addToWindow(win)
 }

@@ -438,6 +438,33 @@ func ColorDialog(win fyne.Window) {
 		logic.BoardChange()
 	}
 
+	resetButton := widget.NewButton(
+		"Reset Colors",
+		func() {
+			switch currVariant {
+			case theme.VariantDark:
+				tempBackgroundColor = defaultDarkBackgroundColor
+			default:
+				tempBackgroundColor = defaultLightBackgroundColor
+			}
+			tempPrimaryColor = defaultPrimaryColor
+			tempQuestionColor = defaultQuestionColor
+			tempTitleColor = defaultTitleColor
+			tempQuestionColor = defaultQuestionColor
+			tempCategoryColor = defaultCategoryColor
+
+			updateBackground()
+			updatePrimary()
+			updateTitle()
+			updateQuestion()
+			updateCategory()
+		},
+	)
+	layout = container.NewVBox(
+		layout,
+		resetButton,
+	)
+
 	form := dialog.NewCustomConfirm(
 		"Change Editor Style",
 		"Save",

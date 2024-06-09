@@ -1,4 +1,3 @@
 - Ya know, that whole "run" thing
-- Reset colors
 - Figure out images????
 - Help as dialog, not new window

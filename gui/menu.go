@@ -54,19 +54,27 @@ func saveAsBoardMenuItem(win fyne.Window) *fyne.MenuItem {
 	return menuItem
 }
 
+func styleMenuItem(win fyne.Window) *fyne.MenuItem {
+	callback := styleShortcut(win)
+	menuItem := menuItemFromCallback("Edit Style", callback)
+	return menuItem
+}
+
 //------------------------------------------------------------------------
-// Define our "File" menu based on our menu items
+// Define our "Board" menu based on our menu items
 //------------------------------------------------------------------------
 
-func fileMenu(win fyne.Window) *fyne.Menu {
+func boardMenu(win fyne.Window) *fyne.Menu {
 	items := [](*fyne.MenuItem){
 		newBoardMenuItem(win),
 		loadBoardMenuItem(win),
 		saveBoardMenuItem(win),
 		saveAsBoardMenuItem(win),
+		fyne.NewMenuItemSeparator(),
+		styleMenuItem(win),
 	}
 	return fyne.NewMenu(
-		"File",
+		"Board",
 		items...,
 	)
 }
@@ -77,7 +85,7 @@ func fileMenu(win fyne.Window) *fyne.Menu {
 
 func MainMenu(win fyne.Window) *fyne.MainMenu {
 	items := [](*fyne.Menu){
-		fileMenu(win),
+		boardMenu(win),
 	}
 	return fyne.NewMainMenu(items...)
 }
