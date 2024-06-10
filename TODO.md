@@ -1,3 +1,3 @@
 - Ya know, that whole "run" thing
-- Figure out images????
-- Help as dialog, not new window
+- Style popup
+- Players (lol)

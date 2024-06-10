@@ -142,7 +142,7 @@ func saveToFile(win fyne.Window, forceSaveAs bool) {
 // Help Window
 //------------------------------------------------------------------------
 
-func showHelp() {
+func showHelp(win fyne.Window) {
 	titleText := canvas.NewText("Jeopardy", color.White)
 	titleText.Alignment = fyne.TextAlignCenter
 	titleText.TextStyle = fyne.TextStyle{Bold: true}
@@ -180,9 +180,12 @@ func showHelp() {
 	)
 	content.Resize(fyne.NewSize(200, 100))
 
-	w := fyne.CurrentApp().NewWindow("Information")
-	w.SetContent(content)
-	w.Show()
+	dialog.ShowCustom(
+		"About",
+		"Close",
+		content,
+		win,
+	)
 }
 
 //------------------------------------------------------------------------
@@ -210,7 +213,7 @@ func Toolbar(win fyne.Window) *widget.Toolbar {
 		style.ColorDialog(win)
 	})
 	helpAction := widget.NewToolbarAction(theme.HelpIcon(), func() {
-		showHelp()
+		showHelp(win)
 	})
 
 	refreshIcons := func() {
